@@ -47,12 +47,12 @@ section .mono{color:var(--mag2)}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
 .tile b{display:block;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:19px;color:var(--navy);margin-bottom:6px}
 .tile p{margin:0;color:var(--mute);font-size:15px}
-.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.proj{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;display:flex;flex-direction:column;transition:.2s}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.proj{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;transition:.2s}
 .proj:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(18,41,90,.12)}
-.proj .shot{display:block;width:calc(100% + 60px);margin:-30px -30px 22px;border-radius:22px 22px 0 0;border-bottom:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top}
+.proj .shot{display:block;width:calc(100% + 52px);margin:-26px -26px 22px;border-radius:22px 22px 0 0;border-bottom:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top}
 .proj .tag{align-self:flex-start;background:#fde7f3;color:var(--mag2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:14px}
-.proj h3{font-size:24px;color:var(--navy);margin-bottom:10px}
+.proj h3{font-size:22px;color:var(--navy);margin-bottom:10px}
 .proj p{color:var(--mute);margin:0 0 20px;flex:1;font-size:15px}
 .proj p b{color:var(--navy)}
 .proj a.go{color:var(--mag2);font-weight:600;text-decoration:none}
@@ -141,8 +141,8 @@ footer{padding:28px 0 40px;color:var(--mute);font-size:13px;text-align:center}
 
 <section id="projekte" style="padding-top:0"><div class="wrap">
  <div class="mono">Projekte</div>
- <h2>Zwei Konzeptstudien zum Ausprobieren</h2>
- <p class="lead">Eigene Prototypen, die zeigen, wie ich HR-Prozesse denke. Beide laufen komplett im Browser, mit Beispieldaten und fiktiven Personen.</p>
+ <h2>Drei Konzeptstudien zum Ausprobieren</h2>
+ <p class="lead">Eigene Prototypen, die zeigen, wie ich HR-Prozesse denke. Alle laufen komplett im Browser, mit Beispieldaten und fiktiven Personen.</p>
  <div class="projects">
   <article class="proj">
    <img class="shot" src="assets/vorschau-urlaub.jpg" alt="Vorschau der Demo Urlaubsübergabe: Übersicht mit Abwesenheitsstatus und offenen Aufgaben" loading="lazy">
@@ -157,6 +157,13 @@ footer{padding:28px 0 40px;color:var(--mute);font-size:13px;text-align:center}
    <h3>Wissen bleibt</h3>
    <p><b>Problem:</b> Mit jedem Austritt oder Wechsel geht Erfahrungswissen verloren.<br><b>Ansatz:</b> Strukturierte Wissenssicherung mit Fristen, Nachfolge und Wissenslücken.<br><b>Nutzen:</b> Kritisches Wissen ist rechtzeitig übergeben und nachvollziehbar.</p>
    <a class="go" href="wissen-bleibt/">Demo öffnen &rarr;</a>
+  </article>
+  <article class="proj">
+   <img class="shot" src="assets/vorschau-exit-coach.jpg" alt="Vorschau der Demo Exit-Coach: Startseite mit Gesprächsvorbereitung und Beispiel-Dossier" loading="lazy">
+   <span class="tag">Konzeptstudie · Demo</span>
+   <h3>Exit-Coach</h3>
+   <p><b>Problem:</b> Trennungs- und Kündigungsgespräche werden oft schlecht vorbereitet und fallen dann schwerer als nötig.<br><b>Ansatz:</b> Geführte Vorbereitung, Rollenspiel mit schwierigen Reaktionen und ein Gesprächs-Dossier.<br><b>Nutzen:</b> Mehr Klarheit und Haltung im Gespräch, respektvoller Umgang auf beiden Seiten.</p>
+   <a class="go" href="exit-coach/">Demo öffnen &rarr;</a>
   </article>
  </div>
  <div class="note">Hinweis: Die Prototypen speichern Eingaben nur lokal im eigenen Browser und senden nichts an einen Server.</div>

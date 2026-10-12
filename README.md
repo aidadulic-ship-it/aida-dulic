@@ -5,6 +5,7 @@ Statische Website (HTML, CSS, JavaScript) ohne Build-Schritt.
 - `index.html` Startseite
 - `urlaubsuebergabe/` Konzeptstudie Urlaubsübergabe
 - `wissen-bleibt/` Konzeptstudie Wissen bleibt
+- `exit-coach/` Konzeptstudie Exit-Coach
 - `impressum.html`, `datenschutz.html` Vorlagen, Platzhalter in [eckigen Klammern] vor der Veröffentlichung ausfüllen
 - `assets/` Bilder, Logo und lokale Schriften
 - `LICENSE` Alle Rechte vorbehalten

@@ -1,0 +1,1742 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Exit-Coach – Konzeptstudie von Aida Đulić</title>
+<meta name="description" content="Konzeptstudie: Ein Übungsraum für schwierige Trennungs- und Kündigungsgespräche. Von Aida Đulić.">
+<meta name="author" content="Aida Đulić">
+<meta name="copyright" content="© 2026 Aida Đulić. Alle Rechte vorbehalten.">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+/* Layout: eine schmale, mobile Spalte; Coach-Bereiche petrol, Rollenspiel amber – klar getrennt. */
+:root {
+  --bg: #f6f7fb; --surface: #ffffff; --surface-2: #eef1f9; --ink: #16203a; --muted: #5a6580; --line: #e2e6f0;
+  --accent: #d6288c; --accent-ink: #ffffff; --accent-text: #b0116f; --accent-soft: #fde7f3;
+  --coach: #12295a; --coach-ink: #ffffff;
+  --role: #b0116f; --role-soft: #f8f9fd; --role-head: #eef1f9; --role-line: #d5dcf2; --work: #c47a12;
+  --danger: #b42318; --danger-soft: #fdecea; --warn-soft: #fff6db;
+  --font: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Bricolage Grotesque", var(--font); --brand: "Syne", var(--display); --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1426; --surface: #141d36; --surface-2: #1b2744; --ink: #e8ecf8; --muted: #9aa6c4; --line: #2a3658;
+  --accent: #e0479f; --accent-ink: #ffffff; --accent-text: #ff8fc9; --accent-soft: #3a1a30;
+  --coach: #1b3a7a; --coach-ink: #ffffff;
+  --role: #ff8fc9; --role-soft: #101a31; --role-head: #1b2744; --role-line: #2f3d66; --work: #e7a95a;
+  --danger: #f97066; --danger-soft: #3a1d1a; --warn-soft: #36301a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d1426; --surface: #141d36; --surface-2: #1b2744; --ink: #e8ecf8; --muted: #9aa6c4; --line: #2a3658;
+  --accent: #e0479f; --accent-ink: #ffffff; --accent-text: #ff8fc9; --accent-soft: #3a1a30;
+  --coach: #1b3a7a; --coach-ink: #ffffff;
+  --role: #ff8fc9; --role-soft: #101a31; --role-head: #1b2744; --role-line: #2f3d66; --work: #e7a95a;
+  --danger: #f97066; --danger-soft: #3a1d1a; --warn-soft: #36301a; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; -webkit-text-size-adjust: 100%; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--accent-text); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.top nav { max-width: 42rem; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; background: none; border: 0; padding: 0; cursor: pointer; }
+.wm { display: flex; flex-direction: column; line-height: 1.1; text-align: left; }
+.wm b { font-family: var(--brand); font-weight: 600; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--coach); }
+.wm b i { font-style: normal; color: var(--accent-text); }
+.wm small { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wm b { color: var(--ink); } }
+.navlinks { display: flex; gap: 2px; }
+.navlinks button { background: none; border: 0; padding: 8px 10px; border-radius: 8px; color: var(--muted); cursor: pointer; font-size: 14px; }
+.navlinks button:hover, .navlinks button[aria-current="page"] { background: var(--surface-2); color: var(--ink); }
+main { max-width: 42rem; margin: 0 auto; padding: 20px 16px 96px; display: flex; flex-direction: column; gap: 20px; }
+
+h1 { font-family: var(--display); font-weight: 800; color: var(--coach); font-size: 26px; line-height: 1.2; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h2 { font-size: 17px; margin: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) h1 { color: var(--ink); } }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text); }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.stack-lg { display: flex; flex-direction: column; gap: 18px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > * { flex: 1 1 0; min-width: 0; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 16px; border-radius: 12px; font-weight: 650; cursor: pointer; border: 1.5px solid var(--coach); color: var(--coach); background: var(--surface); text-align: center; }
+.btn:hover:not(:disabled) { background: var(--surface-2); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); min-height: 52px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: var(--ink); border-color: var(--line); } :root:not([data-theme="light"]) .btn-primary { color: var(--accent-ink); border-color: var(--accent); } }
+.btn-primary:hover:not(:disabled) { background: var(--accent); filter: brightness(1.08); }
+.btn-ghost { background: none; border-color: transparent; color: var(--muted); }
+.btn-quiet { background: none; border-color: transparent; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; font-weight: 600; font-size: 14px; }
+.btn-danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
+.btn-danger:hover:not(:disabled) { background: var(--danger-soft); }
+.btn-block { width: 100%; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+label.lbl, .lbl { display: block; font-weight: 650; font-size: 14px; margin-bottom: 6px; }
+.field { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 13px; font-size: 16px; outline: none; resize: vertical; }
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent); }
+.field::placeholder { color: color-mix(in srgb, var(--muted) 75%, transparent); }
+.hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.choice { display: grid; gap: 8px; }
+.choice-3 { grid-template-columns: repeat(3, 1fr); }
+.pill { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 12px; font-weight: 650; font-size: 14px; cursor: pointer; text-align: left; }
+.pill[aria-pressed="true"] { border-color: var(--coach); background: var(--coach); color: var(--coach-ink); }
+.pill.diff { text-align: center; text-transform: capitalize; }
+.pill.diff[aria-pressed="true"] { border-color: var(--coach); background: var(--coach); color: var(--coach-ink); }
+
+.hero { background: linear-gradient(135deg, #12295a, #1b3a7a); color: #fff; border-radius: 20px; padding: 36px 20px; display: flex; flex-direction: column; gap: 14px; }
+.hero h1 { color: #fff; font-size: 34px; line-height: 1.05; letter-spacing: -.02em; }
+.hero .eyebrow { color: #c9d3f0; }
+.lockline { display: flex; align-items: center; gap: 8px; }
+.hero .lead { color: #d5dcf2; font-size: 16px; max-width: 28rem; }
+.hero .dur { text-align: center; margin-top: -4px; }
+.flow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; color: var(--muted); }
+.flow li:not(:last-child)::after { content: "/"; margin-left: 8px; color: var(--line); }
+.flow .first { color: var(--ink); font-weight: 650; }
+.mic-wrap { position: relative; }
+.mic-wrap .field { padding-right: 58px; resize: none; }
+.mic { position: absolute; right: 8px; bottom: 8px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--coach); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.mic:disabled { opacity: .4; cursor: not-allowed; }
+.mic[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 25%, transparent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mic { color: var(--ink); } :root:not([data-theme="light"]) .mic[aria-pressed="true"] { color: var(--accent-ink); } }
+.voice-msg { color: var(--danger); font-size: 12px; margin-top: 4px; }
+.ttsrow { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; font-size: 13px; }
+.ttsrow input { width: 16px; height: 16px; accent-color: var(--accent); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+@media (min-width: 560px) { .steps { grid-template-columns: 1fr 1fr; } }
+.steps li { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.num { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.panel { border-radius: 20px; overflow: hidden; background: var(--surface); }
+.panel-coach { border: 1px solid var(--line); }
+.panel-coach > .ph { background: var(--coach); color: var(--coach-ink); }
+.panel-fb { border: 1px solid var(--line); }
+.panel-fb > .ph { background: var(--coach); color: var(--coach-ink); }
+.ph { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 12px 18px; }
+.ph .tag { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #ffb3dc; }
+.ph .t { font-size: 17px; font-weight: 650; }
+.pb { padding: 16px; }
+
+.panel-role { border: 1.5px solid var(--role-line); background: var(--role-soft); }
+.panel-role > .ph { background: var(--role-head); color: var(--coach); border-bottom: 1px solid var(--role-line); }
+.panel-role > .ph .tag { color: var(--coach); }
+.panel-role { border-top: 3px solid var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .panel-role > .ph .tag { color: var(--ink); } }
+.panel-role .ph .r { margin-left: auto; font-size: 12px; font-weight: 600; background: var(--surface); color: var(--coach); text-transform: capitalize; padding: 2px 10px; border-radius: 99px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .panel-role > .ph { color: var(--ink); } }
+.chat { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.bubble { max-width: 86%; padding: 9px 13px; border-radius: 16px; font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bubble .who { display: block; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+.me { align-self: flex-end; background: var(--coach); color: var(--coach-ink); border-bottom-right-radius: 5px; }
+.me .who { color: #aab6dd; }
+.them { align-self: flex-start; background: var(--surface); border: 1px solid var(--role-line); border-bottom-left-radius: 5px; }
+.them .who { color: var(--muted); }
+.composer { border-top: 1px solid var(--role-line); background: var(--surface); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+.progress { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.progress li { flex: 1; }
+.progress .bar { height: 6px; border-radius: 6px; background: var(--line); }
+.progress .done .bar { background: var(--coach); }
+.progress .cur .bar { background: var(--accent); }
+.progress .pl { display: none; font-size: 11px; color: var(--muted); margin-top: 4px; }
+.progress .cur .pl { color: var(--ink); font-weight: 650; }
+@media (min-width: 560px) { .progress .pl { display: block; } }
+
+.fbsec { padding: 12px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.fbsec:first-child { border-top: 0; padding-top: 0; }
+.fbh { display: flex; align-items: center; gap: 8px; }
+.fbh h3 { margin: 0; font-size: 17px; font-weight: 650; color: var(--coach); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fbh h3 { color: var(--ink); } }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.chip { margin-left: auto; font-size: 11px; font-weight: 650; padding: 2px 7px; border-radius: 6px; background: var(--surface-2); color: var(--muted); }
+blockquote { margin: 0; padding-left: 12px; border-left: 2px solid var(--line); font-style: italic; }
+.unv { font-style: normal; font-size: 12px; color: var(--danger); }
+.alt { background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; font-weight: 500; font-size: 17px; line-height: 1.4; }
+.sub { display: block; font-weight: 400; font-size: 13px; color: var(--muted); }
+.btn-opt { flex-direction: column; align-items: flex-start; gap: 0; text-align: left; justify-content: center; min-height: 56px; }
+
+.note { border-radius: 12px; padding: 11px 13px; font-size: 13px; }
+.note-legal { background: var(--warn-soft); border: 1px solid var(--line); }
+.note-err { background: var(--danger-soft); color: var(--danger); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.note-err span { flex: 1 1 12rem; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent-text); font-weight: 650; cursor: pointer; text-decoration: underline; }
+.note-err .linkbtn { color: var(--danger); }
+.banner { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 13px; font-size: 14px; }
+.banner span { flex: 1 1 14rem; }
+.spin { display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: 14px; }
+.spin::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent); animation: rot .8s linear infinite; }
+@keyframes rot { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin::before { animation: none; } }
+
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.item { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; }
+.item-main { display: flex; gap: 10px; align-items: flex-start; padding: 12px; }
+.item-open { flex: 1; min-width: 0; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; }
+.item-open b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-del { background: none; border: 0; color: var(--muted); padding: 6px 8px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+.item-del:hover { background: var(--danger-soft); color: var(--danger); }
+.confirm { border-top: 1px solid var(--line); background: color-mix(in srgb, var(--danger-soft) 60%, var(--surface)); padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; }
+.confirm span { flex: 1 1 10rem; }
+.confirm .btn { min-height: 36px; padding: 6px 12px; }
+details.box { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 13px; font-size: 14px; }
+details.box summary { cursor: pointer; font-weight: 650; }
+details.more { border: 1px dashed var(--line); border-radius: 12px; }
+details.more summary { cursor: pointer; padding: 12px 13px; font-weight: 650; font-size: 14px; }
+details.more > div { border-top: 1px solid var(--line); padding: 13px; display: flex; flex-direction: column; gap: 14px; }
+.transcript { margin: 8px 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.provider { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); cursor: pointer; }
+.provider.sel { border-color: var(--accent); background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface)); }
+.provider input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
+.badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.badge { font-size: 11px; font-weight: 650; padding: 2px 6px; border-radius: 6px; background: var(--accent-soft); color: var(--accent-text); }
+.badge.off { background: var(--surface-2); color: var(--muted); text-decoration: line-through; }
+.divider { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.modal { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 16px; }
+.modal-card { width: 100%; max-width: 28rem; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.modal-card ul { margin: 0; padding-left: 20px; }
+
+/* Executive-Vorbereitung */
+.pscen { display: block; padding: 14px 14px; width: 100%; } .pscen b { white-space: normal; } .pscen .small { display: block; margin-top: 2px; }
+.pprog { height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; } .pprog i { display: block; height: 100%; background: var(--accent); }
+.pnav { display: flex; gap: 10px; } .pnav .btn { flex: 1; } .pnav .btn-primary { flex: 2; }
+.pq { font-size: 17px; font-weight: 600; line-height: 1.4; }
+.pline { font-size: 17px; font-style: italic; }
+.alt { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+.grill { border: 1.5px solid var(--accent); border-left-width: 5px; border-radius: 12px; background: var(--accent-soft); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; } .grill p { margin: 0; }
+.chk { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; } .chk input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); }
+.pscore { display: flex; gap: 16px; align-items: center; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.pscore .num { font-family: var(--display); font-size: 44px; font-weight: 800; line-height: 1; color: var(--coach); }
+.pscore.ok .num { color: #137a45; } .pscore.mid .num { color: var(--work); } .pscore.low .num { color: var(--danger); }
+.pbars { display: flex; flex-direction: column; gap: 8px; } .pbar { display: grid; grid-template-columns: 9.5rem 1fr 2rem; gap: 10px; align-items: center; font-size: 13px; }
+.pbar .track { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; } .pbar .track i { display: block; height: 100%; background: var(--coach); } .pbar b { text-align: right; }
+.psec { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); padding-top: 18px; } .psec p { margin: 0; }
+.pul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.pquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 12px 12px 0; } .pquote p { margin-top: 2px; white-space: pre-wrap; }
+.psteps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; } .psteps p { margin-top: 2px; }
+.pcard { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; } .pcard .eyebrow { font-size: 10px; }
+.pcheck { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; } .pcheck label { display: flex; gap: 10px; align-items: flex-start; } .pcheck input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); }
+.grill-ai { border-color: var(--coach); background: var(--surface-2); } .grill-ai .eyebrow { color: var(--coach); }
+.prate { display: flex; gap: 8px; margin-top: 6px; } .prate .btn { flex: 1; min-height: 44px; }
+.pact { display: flex; flex-wrap: wrap; gap: 8px; } .pact .btn { flex: 1 1 9rem; }
+@media print { .top, .noprint, .mic, #modal-root { display: none !important; } body { background: #fff; } .psec, .pcard { break-inside: avoid; } main { max-width: none; } }
+
+/* Auftritt */
+.btn-onhero { background: transparent; color: #fff; border-color: rgba(255,255,255,.45); }
+.hero-split { gap: 22px; }
+.hero-main { display: flex; flex-direction: column; gap: 14px; }
+.preview { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; color: #fff; }
+.preview .eyebrow { color: #c9d3f0; }
+.pv-score { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.pv-score b { font-family: var(--display); font-size: 18px; }
+.pv-num { font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1; } .pv-num small { font-size: 13px; font-weight: 500; opacity: .75; }
+.pv-bars { display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #d5dcf2; }
+.pv-bars div { display: flex; flex-direction: column; gap: 4px; } .pv-bars i { display: block; height: 6px; border-radius: 999px; background: linear-gradient(90deg, #d6288c, #ff8fc9); }
+.pv-card { margin: 0; padding: 10px 12px; border-left: 3px solid #d6288c; background: rgba(255,255,255,.07); border-radius: 0 10px 10px 0; font-size: 14px; } .pv-card .eyebrow { display: block; margin-bottom: 4px; }
+.pv-foot { margin: 0; font-size: 12px; color: #c9d3f0; }
+.fine { gap: 6px; } .fine h2 { font-size: 14px; }
+.list-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.pdur { display: block; margin-top: 6px; font-size: 10px; color: var(--muted); }
+.pscore:is(.ok,.mid,.low) { flex-direction: column; align-items: flex-start; gap: 4px; }
+.pscore .stufe { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.1; color: var(--coach); }
+.pscore.ok .stufe { color: #137a45; } .pscore.mid .stufe { color: var(--work); } .pscore.low .stufe { color: var(--danger); }
+.znum { font-family: var(--mono); font-weight: 500; }
+.eyebrow { font-size: 12px; }
+@media (min-width: 960px) {
+  body[data-wide] .top nav, body[data-wide] main { max-width: 68rem; }
+  .hero-split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; padding: 56px 44px; align-items: center; }
+  .hero-split .hero-main h1 { font-size: 46px; }
+  .hero-split .hero-main .lead { max-width: 32rem; }
+  .hero-split .hero-main .btn-block { width: auto; align-self: flex-start; min-width: 16rem; }
+  .hero .dur { text-align: left; }
+  .list-grid { grid-template-columns: 1fr 1fr; }
+  body[data-wide] .flow, body[data-wide] .fine { max-width: 42rem; }
+}
+
+.printhead, .printfoot { display: none; }
+.method { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; font-size: 14px; } .method summary { cursor: pointer; font-weight: 600; } .method p { margin: 10px 0 0; }
+@media print {
+  @page { size: A4; margin: 18mm 16mm 20mm; }
+  html, body { background: #fff !important; color: #111; font-size: 11pt; }
+  .printhead { display: flex; justify-content: space-between; border-bottom: 2px solid #12295a; padding-bottom: 6px; margin-bottom: 14px; font-size: 9pt; color: #12295a; font-family: var(--mono); letter-spacing: .08em; }
+  .printfoot { display: block; position: fixed; bottom: 0; left: 0; right: 0; font-size: 8pt; color: #555; border-top: 1px solid #bbb; padding-top: 4px; }
+  main { padding: 0 0 10mm; max-width: none; gap: 14px; } .pdoss { gap: 14px; }
+  .pdoss h1 { font-size: 24pt; color: #12295a; } .psec h2 { font-size: 13pt; color: #12295a; } .psec { break-inside: auto; padding-top: 12px; }
+  .pquote, .pcard, .pscore, .note { break-inside: avoid; } .pscore { border: 1px solid #ccc; }
+  .pquote { background: #f5f6fa; } .pcard { border: 1px solid #ccc; background: #fff; }
+  .pbar .track i { background: #12295a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .method, details { display: none; }
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+
+<header class="top">
+  <nav>
+    <button class="brand" data-go="home"><span class="wm"><b>Aida <i>Đulić</i></b><small>Exit-Coach</small></span></button>
+    <div class="navlinks">
+      <button data-go="prep" id="nav-prep">Vorbereitung</button>
+      <button data-go="history" id="nav-history">Verlauf</button>
+      <button data-go="settings" id="nav-settings">Einstellungen</button>
+    </div>
+  </nav>
+</header>
+<main id="app" aria-live="polite"></main>
+<div id="modal-root"></div>
+
+<script>
+(() => {
+"use strict";
+
+// ---------------- Domäne ----------------
+const SCENARIOS = {
+  "eigene-kuendigung": "Eigene Kündigung ansprechen",
+  "trennung-mitarbeitende": "Trennung von Mitarbeitenden",
+  "ausstieg-zusammenarbeit": "Ausstieg aus einer Zusammenarbeit",
+};
+const DIFFICULTIES = {
+  leicht: "Leicht – kooperativ, stellt Fragen",
+  mittel: "Mittel – enttäuscht, bringt Einwände",
+  schwer: "Schwer – emotional, drängt, verhandelt",
+};
+const PRIME = {
+  purpose: "Purpose – Ziel",
+  research: "Research – Fakten & Rahmen",
+  interview: "Interview – Gegenüber & Beziehung",
+  mechanics: "Mechanics – Ablauf & Setting",
+  examples: "Examples – Erfahrungen & eigene Sprache",
+};
+const SKILLS = { klarheit: "Klarheit", zuhoeren: "Zuhören", empathie: "Empathie", grenzsetzung: "Grenzsetzung", einwaende: "Umgang mit Einwänden" };
+const PHASE_LABEL = { interview: "Rückfragen", opening: "Einstieg", roleplay: "Rollenspiel", feedback: "Feedback", repeat: "Wiederholung", "repeat-feedback": "Feedback", "next-step": "Nächster Schritt", done: "Abgeschlossen" };
+const STEP_ORDER = ["Rückfragen", "Einstieg", "Rollenspiel", "Feedback", "Wiederholen", "Nächster Schritt"];
+const PHASE_STEP = { interview: 0, opening: 1, roleplay: 2, feedback: 3, repeat: 4, "repeat-feedback": 4, "next-step": 5, done: 6 };
+const MAX_USER_TURNS = 12;
+const TIERS = { quick: "Schnell", default: "Standard", complex: "Gründlich" };
+
+const PLACEHOLDER = {
+  "eigene-kuendigung": ["z. B. Ich habe ein Angebot angenommen und möchte meiner Chefin nächste Woche meine Kündigung mitteilen.", "z. B. Seit 4 Jahren im Team, gutes Verhältnis, sie hat mich gefördert.", "z. B. Kündigung klar mitteilen, Übergabe fair planen.", "z. B. Gegenangebot, Schuldgefühle, Frage nach dem neuen Arbeitgeber."],
+  "trennung-mitarbeitende": ["z. B. Ich muss einem Mitarbeiter mitteilen, dass sein Vertrag nicht verlängert wird.", "z. B. Direkte Führungskraft seit 2 Jahren, sachlich-freundlich.", "z. B. Entscheidung klar und respektvoll übermitteln, nächste Schritte erklären.", "z. B. Frage nach dem Warum, Vorwürfe, emotionale Reaktion."],
+  "ausstieg-zusammenarbeit": ["z. B. Ich möchte die Zusammenarbeit mit einem langjährigen Kunden beenden.", "z. B. 3 Jahre Zusammenarbeit, zuletzt viele Konflikte über Umfang und Termine.", "z. B. Ausstieg klar kommunizieren, laufende Projekte sauber abschließen.", "z. B. Versuch, mich umzustimmen, Druck wegen offener Aufträge."],
+};
+const EXAMPLE = {
+  scenario: "trennung-mitarbeitende", difficulty: "mittel",
+  situation: "Ich muss Tom mitteilen, dass sein befristeter Vertrag Ende Dezember nicht verlängert wird. Die Entscheidung kam von der Bereichsleitung wegen Budgetkürzungen.",
+  relationship: "Ich bin seit zwei Jahren seine Teamleiterin. Wir arbeiten gut zusammen, er ist engagiert.",
+  counterpartLabel: "Tom",
+  goal: "Die Entscheidung klar und respektvoll mitteilen und die Übergabe besprechen.",
+  difficultMoments: "Er fragt nach dem Warum, ist enttäuscht und versucht, mich umzustimmen.",
+  experience: "", writingSample: "",
+};
+
+// ---------------- Hilfen ----------------
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const uid = () => (crypto?.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
+const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString("de-AT"); } catch { return ""; } };
+
+function normalize(t) {
+  return String(t).toLowerCase().replace(/[„“”"'‚‘’»«]/g, "").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().replace(/^[\s.,;:!?-]+|[\s.,;:!?-]+$/g, "");
+}
+function quoteAppearsIn(quote, texts) {
+  const parts = String(quote || "").split(/…|\.\.\.|\[\.\.\.\]/).map(normalize).filter(Boolean);
+  if (!parts.length || parts.join("").length < 4) return false;
+  return texts.some((t) => { const hay = normalize(t); let from = 0; for (const p of parts) { const i = hay.indexOf(p, from); if (i < 0) return false; from = i + p.length; } return true; });
+}
+const LEGAL_RX = [/kündigungsfrist/i, /kündigungsschutz/i, /abfindung/i, /abfertigung/i, /arbeitsrecht/i, /arbeitsvertrag/i, /aufhebungsvertrag/i, /auflösungsvereinbarung/i, /einvernehmliche auflösung/i, /betriebsrat/i, /arbeitsgericht/i, /\bklage|verklagen/i, /anwalt|anwältin/i, /abmahnung/i, /sozialauswahl/i, /freistellung/i, /resturlaub|urlaubsanspruch/i, /arbeitszeugnis|dienstzeugnis/i, /sperrzeit|sperrfrist/i, /fristlos|entlassung/i, /wettbewerbsverbot|konkurrenzklausel/i, /rechtlich|prüfen lassen/i];
+const LEGAL_NOTICE = "Der Coach gibt keine verbindliche Rechtsberatung. Bei arbeitsrechtlichen Fragen – etwa Fristen, Abfindung/Abfertigung, Verträge oder Formvorschriften – hol dir verbindliche Auskunft, z. B. bei einer Fachanwältin/einem Fachanwalt für Arbeitsrecht, der Arbeiterkammer, Gewerkschaft, dem Betriebsrat oder deiner HR-/Rechtsabteilung.";
+const mentionsLegal = (...t) => { const j = t.filter(Boolean).join("\n"); return LEGAL_RX.some((r) => r.test(j)); };
+
+// ---------------- Ablage (nur dieser Browser) ----------------
+const KEY_S = "exitcoach.sessions.v1", KEY_SET = "exitcoach.settings.v1";
+let memSessions = [], memSettings = {};
+function loadAll() {
+  try { memSessions = JSON.parse(localStorage.getItem(KEY_S) || "[]"); } catch { memSessions = memSessions || []; }
+  try { memSettings = JSON.parse(localStorage.getItem(KEY_SET) || "{}"); } catch { memSettings = memSettings || {}; }
+}
+function persist() {
+  try { localStorage.setItem(KEY_S, JSON.stringify(memSessions)); } catch {}
+  try { localStorage.setItem(KEY_SET, JSON.stringify(memSettings)); } catch {}
+}
+const getSession = (id) => memSessions.find((s) => s.id === id);
+function update(id, fn, rerender = true) {
+  const i = memSessions.findIndex((s) => s.id === id);
+  if (i < 0) return;
+  memSessions[i] = { ...fn(memSessions[i]), updatedAt: new Date().toISOString() };
+  persist();
+  if (rerender) render();
+  return memSessions[i];
+}
+
+// ---------------- KI-Anbieter ----------------
+// Zwei Anbieter: Claude (über das Konto der Person, die die Seite öffnet) und ein lokaler Mock.
+let sampleFn = null;           // aufgelöst über claude.use("sample")
+let sampleState = "pending";   // pending | ready | absent | denied
+const PROVIDERS = {
+  claude: { id: "claude", label: "Claude (nur in der Claude-Umgebung)", external: true },
+  mock: { id: "mock", label: "Mock (lokal, ohne KI)", external: false },
+};
+const claudeUsable = () => sampleState === "ready" && !!sampleFn;
+function effectiveProvider() {
+  const want = memSettings.providerId;
+  if (want === "mock") return "mock";
+  if (want === "claude") return claudeUsable() ? "claude" : "mock";
+  return claudeUsable() ? "claude" : "mock";
+}
+const effectiveTier = () => memSettings.tier || "default";
+const providerText = (p, tier) => p === "claude" ? `Claude · ${TIERS[tier] || TIERS.default}` : "Mock (lokal)";
+
+function sampleErrorText(e) {
+  switch (e?.code) {
+    case "not_granted": case "sampling_disabled": case "not_declared": case "capability_disabled": case "capability_removed":
+      sampleState = "denied";
+      return "Claude darf auf dieser Seite gerade nicht antworten. Wechsle in den Einstellungen zum Mock oder erlaube den Zugriff beim nächsten Öffnen.";
+    case "rate_limited": return "Zu viele Anfragen oder dein Nutzungslimit ist erreicht. Bitte versuch es später noch einmal.";
+    case "session_expired": return "Deine Anmeldung ist abgelaufen. Bitte melde dich neu an.";
+    case "refused": return "Claude hat diese Anfrage abgelehnt. Formuliere die Angaben etwas anders.";
+    case "invalid_json": return "Die Antwort hatte nicht das erwartete Format. Bitte erneut versuchen.";
+    case "prompt_too_large": return "Die Übung ist zu lang geworden. Starte eine neue Runde.";
+    case "cancelled": return "";
+    default: return "Die Verbindung zu Claude ist unterbrochen. Bitte erneut versuchen.";
+  }
+}
+
+// ---------------- Prompts (wie im Next.js-Projekt) ----------------
+const PRINCIPLES = `Grundsätze (immer einhalten):
+- Sprich Deutsch, duze den Nutzer, sei klar, warm und knapp.
+- Erfinde keine persönlichen Erfahrungen, Fakten, Namen oder Hintergründe. Wenn dir etwas fehlt, frag danach.
+- Beziehe dich nur auf das, was der Nutzer angegeben oder im Rollenspiel tatsächlich gesagt hat.
+- Bewerte beobachtbare Aussagen und deren mögliche Wirkung. Stelle Gefühle, Gedanken oder Absichten des Gegenübers nie als Tatsachen dar. Schreibe also z. B. „Nach deinem Satz X fragte das Gegenüber nach Y“ statt „Das Gegenüber war verletzt“.
+- Trainierte Fähigkeiten: Klarheit, Zuhören, Empathie, Grenzsetzung, Umgang mit Einwänden.
+- Keine verbindliche Rechtsberatung. Bei arbeitsrechtlichen Fragen (Fristen, Abfindung/Abfertigung, Verträge, Formvorschriften) weise kurz darauf hin, dass eine Fachperson (Arbeitsrecht, Arbeiterkammer/Gewerkschaft, Betriebsrat, HR) verbindlich Auskunft gibt.`;
+
+function describeContext(s, withAnswers = true) {
+  const u = s.setup;
+  const l = [
+    `Gesprächsart: ${SCENARIOS[u.scenario]}`, `Situation: ${u.situation}`, `Beziehung zum Gegenüber: ${u.relationship}`,
+    u.counterpartLabel ? `Gegenüber (Bezeichnung): ${u.counterpartLabel}` : "",
+    `Gesprächsziel des Nutzers: ${u.goal}`, `Erwartete schwierige Momente: ${u.difficultMoments}`,
+    u.experience ? `Eigene Erfahrungen des Nutzers: ${u.experience}` : "Eigene Erfahrungen: (nicht angegeben)",
+    u.writingSample ? `Schreibprobe des Nutzers (für Stil/Stimme):\n"""${u.writingSample}"""` : "Schreibprobe: (nicht angegeben)",
+  ].filter(Boolean);
+  if (withAnswers && s.interview?.questions?.length) {
+    l.push("Antworten auf die Rückfragen des Coaches:");
+    for (const q of s.interview.questions) { const a = (s.answers[q.id] || "").trim(); l.push(`- [${PRIME[q.prime]}] ${q.question}\n  Antwort: ${a || "(übersprungen)"}`); }
+  }
+  return l.join("\n");
+}
+const transcript = (turns) => turns.map((t, i) => `[${i + 1}] ${t.role === "user" ? "NUTZER" : "GEGENÜBER"}: ${t.content}`).join("\n");
+
+const DIFF_BEHAVIOUR = {
+  leicht: "Reagiere überwiegend kooperativ und sachlich. Stelle Verständnisfragen, zeige Interesse an den nächsten Schritten. Ein milder Einwand ist möglich.",
+  mittel: "Reagiere spürbar enttäuscht oder überrascht. Bringe 1–2 nachvollziehbare Einwände (z. B. nach Gründen fragen, Zeitpunkt infrage stellen) und prüfe, ob die Entscheidung feststeht.",
+  schwer: "Reagiere emotional und fordernd: unterbrich, mache Vorwürfe, verhandle hartnäckig, versuche die Entscheidung umzustimmen oder das Gespräch auf Nebenschauplätze zu lenken. Bleib dabei realistisch und respektvoll genug, dass ein Gespräch möglich bleibt – keine Beleidigungen.",
+};
+
+function interviewPromptText(s) {
+  return `Du bist ein erfahrener Kommunikationscoach für Exit-Gespräche (eigene Kündigung, Trennung von Mitarbeitenden, Ausstieg aus einer Zusammenarbeit).
+Aufgabe: Stelle 3 bis 5 gezielte Rückfragen, damit die anschließende Übung realistisch wird. Gehe nach PRIME vor:
+- purpose: Was genau soll am Ende feststehen? Was ist nicht verhandelbar?
+- research: Welche Fakten, Rahmenbedingungen, Vorgeschichte sind relevant? Was weiß das Gegenüber schon?
+- interview: Wie reagiert das Gegenüber erfahrungsgemäß (aus Sicht des Nutzers)? Welche Einwände hat er schon gehört?
+- mechanics: Ort, Zeitpunkt, Dauer, Kanal, wer ist dabei, was passiert direkt danach?
+- examples: Konkrete eigene Erfahrungen mit ähnlichen Gesprächen und typische eigene Formulierungen. Bitte – falls noch keine vorliegt – optional um eine kurze Schreibprobe.
+Regeln: Frage nur nach, was fehlt oder unklar ist. Jede Frage kurz, konkret, einzeln beantwortbar. Keine Suggestivfragen, keine Ratschläge, keine Annahmen über Fakten. Formuliere keinen Gesprächseinstieg für den Nutzer. "why" erklärt in einem Satz, wofür die Antwort gebraucht wird. "legalNotice": leerer String, außer die Angaben berühren arbeitsrechtliche Fragen.
+
+${PRINCIPLES}
+
+Angaben des Nutzers:
+${describeContext(s, false)}
+
+Antworte nur mit JSON in genau dieser Form:
+{"questions":[{"prime":"purpose|research|interview|mechanics|examples","question":"...","why":"..."}],"legalNotice":""}`;
+}
+
+function counterpartPromptText(s, round) {
+  const u = s.setup, repeat = round.kind === "wiederholung";
+  return `ROLLENSPIEL. Du spielst ausschließlich das Gegenüber in einem Übungsgespräch. Du bist NICHT der Coach.
+
+Kontext (vom Nutzer angegeben):
+${describeContext(s)}
+
+Deine Rolle: ${u.counterpartLabel || "das Gegenüber, wie es der Nutzer oben beschrieben hat"}.
+Schwierigkeit: ${u.difficulty}. ${DIFF_BEHAVIOUR[u.difficulty]}
+${repeat ? "Dies ist eine Wiederholung eines schwierigen Moments. Bleib bei der Linie, die du zuletzt vertreten hast, und reagiere auf die neue Formulierung des Nutzers.\n" : ""}
+Regeln:
+- Sprich in der Ich-Form als Gegenüber, auf Deutsch, in natürlicher gesprochener Sprache. 1–4 Sätze.
+- Kein Coaching, keine Bewertungen, keine Meta-Kommentare, keine Regieanweisungen in Klammern, keine Emojis.
+- Nutze nur Fakten aus dem Kontext oder aus dem, was der Nutzer im Gespräch sagt. Erfinde keine neuen harten Fakten (Zahlen, Daten, Vorfälle). Eigene Reaktionen, Fragen und Einwände sind erlaubt.
+- Reagiere konkret auf die letzte Aussage des Nutzers. Wenn der Nutzer klar, empathisch und konsequent bleibt, darfst du dich – passend zur Schwierigkeit – allmählich beruhigen.
+- Gib keine Rechtsauskünfte; du darfst aber als Gegenüber nach rechtlichen Dingen fragen.
+
+Bisheriges Gespräch:
+${transcript(round.turns)}
+
+Antworte jetzt nur mit der nächsten Äußerung des GEGENÜBERS, ohne Präfix und ohne Anführungszeichen.`;
+}
+
+function feedbackPromptText(s, round, prevLines) {
+  const repeat = prevLines.length > 0;
+  return `Du bist der Coach. Das Rollenspiel ist beendet. Gib kompaktes, konkretes Feedback zu den Aussagen des NUTZERS.
+
+Struktur:
+- strength: genau eine konkrete Stärke. "quote" ist ein WÖRTLICHES Zitat (Teilsatz genügt) aus einer NUTZER-Zeile. "observation": was der Satz beobachtbar leistet (1–2 Sätze). "skill": klarheit | zuhoeren | empathie | grenzsetzung | einwaende.
+- improvement: genau ein Verbesserungspunkt. "quote" ist ein WÖRTLICHES Zitat aus einer NUTZER-Zeile. "observation": was daran beobachtbar unklar, ausweichend, zu lang, zu hart o. Ä. ist und welche Wirkung es haben kann (als Möglichkeit formulieren).
+- alternative: "original" = die wörtliche Nutzer-Aussage, die du verbesserst. "rewrite" = alternative Formulierung, die nach dem Nutzer klingt: übernimm Anrede (du/Sie), Satzlänge, Ton und typische Wörter aus seinen Aussagen und der Schreibprobe. "why": ein Satz.
+- difficultMoment: die WÖRTLICHE GEGENÜBER-Zeile, an der es am schwierigsten wurde und die der Nutzer wiederholen sollte. "whyDifficult": was daran beobachtbar schwierig war.
+- legalNotice: leerer String, außer arbeitsrechtliche Fragen wurden berührt – dann ein kurzer Hinweis ohne Rechtsauskunft.
+${repeat ? "\nDies ist eine WIEDERHOLUNG des schwierigen Moments. Vergleiche – wo möglich – mit der vorherigen Formulierung des Nutzers und benenne, was sich beobachtbar verändert hat.\n" : ""}
+Beschreibe niemals Gefühle oder Absichten des Gegenübers als Tatsache – nur, was gesagt wurde.
+
+${PRINCIPLES}
+
+Kontext:
+${describeContext(s)}
+${repeat ? `\nVorherige Formulierung des Nutzers an dieser Stelle:\n${prevLines.map((l) => `- "${l}"`).join("\n")}\n` : ""}
+Transkript der Übung:
+${transcript(round.turns)}
+
+Antworte nur mit JSON in genau dieser Form:
+{"strength":{"quote":"","observation":"","skill":""},"improvement":{"quote":"","observation":"","skill":""},"alternative":{"original":"","rewrite":"","why":""},"difficultMoment":{"counterpartLine":"","whyDifficult":""},"legalNotice":""}`;
+}
+
+// ---------------- Mock ----------------
+const HEDGES = /\b(eigentlich|vielleicht|irgendwie|halt|quasi|sozusagen|leider|ein bisschen|eventuell|wollte nur|ich glaube)\b/gi;
+const MOCK_LINES = {
+  leicht: ["Okay … damit habe ich nicht gerechnet. Kannst du mir sagen, wie es jetzt konkret weitergeht?", "Verstehe. Und bis wann gilt das? Was passiert mit meinen laufenden Aufgaben?", "Gut, danke, dass du es mir direkt sagst. Kann ich mich bei Fragen noch einmal melden?"],
+  mittel: ["Das kommt jetzt ziemlich überraschend. Warum gerade jetzt?", "Ich finde, das hätte man auch früher ansprechen können. Ist das wirklich schon entschieden?", "Und was ist mit allem, was ich in den letzten Monaten reingesteckt habe? Zählt das gar nicht?", "Gut. Dann möchte ich wenigstens wissen, wie der Übergang aussieht."],
+  schwer: ["Wie bitte? Das ist doch nicht dein Ernst. Nach allem, was ich hier gemacht habe?", "Nein, das akzeptiere ich so nicht. Da muss es doch eine andere Lösung geben.", "Du machst es dir da ziemlich einfach. Wer hat das überhaupt entschieden?", "Dann will ich das schriftlich haben, und ich werde das prüfen lassen.", "… Okay. Und wie soll das jetzt ganz konkret ablaufen?"],
+};
+const sentences = (t) => t.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter((x) => x.length > 2);
+function mockInterview(s) {
+  const q = [
+    { prime: "purpose", question: "Was soll am Ende des Gesprächs unmissverständlich feststehen – und worüber bist du bereit zu sprechen?", why: "So trennen wir das Nicht-Verhandelbare von dem, was offen ist." },
+    { prime: "research", question: "Was weiß dein Gegenüber bereits über die Entscheidung oder die Vorgeschichte?", why: "Davon hängt ab, wie überrascht das simulierte Gegenüber reagieren sollte." },
+    { prime: "mechanics", question: "Wann, wo und wie lange findet das Gespräch statt, und ist noch jemand dabei?", why: "Setting und Zeitrahmen beeinflussen, wie ausführlich du werden kannst." },
+  ];
+  if (!s.setup.experience) q.push({ prime: "examples", question: "Hast du schon einmal ein ähnliches Gespräch geführt? Was lief gut, was würdest du anders machen?", why: "Deine echten Erfahrungen machen das Feedback konkreter." });
+  if (!s.setup.writingSample) q.push({ prime: "examples", question: "Optional: Magst du eine kurze Schreibprobe teilen (z. B. eine typische E-Mail von dir)?", why: "Damit klingen alternative Formulierungen nach dir." });
+  return { questions: q.slice(0, 5), legalNotice: "" };
+}
+function mockCounterpart(s, round) {
+  const d = s.setup.difficulty, lines = MOCK_LINES[d];
+  const n = round.turns.filter((t) => t.role === "user").length;
+  const last = round.turns[round.turns.length - 1]?.content || "";
+  if (/abfindung|abfertigung/i.test(last)) return "Über Geld reden wir dann aber noch genauer. Was genau bietest du an?";
+  if (round.kind === "wiederholung") return d === "leicht" ? "Okay, das ist klarer. Dann lass uns über die nächsten Schritte reden." : "Hm. Das klingt schon klarer. Trotzdem fällt es mir schwer, das so hinzunehmen.";
+  return lines[Math.min(n - 1, lines.length - 1)];
+}
+function mockFeedback(round) {
+  const user = round.turns.filter((t) => t.role === "user").map((t) => t.content);
+  const other = round.turns.filter((t) => t.role === "assistant").map((t) => t.content);
+  const us = user.flatMap(sentences), fallback = user[0] || "—";
+  const empathic = us.find((x) => /(verstehe|nachvollziehen|ich sehe|tut mir|danke|wichtig)/i.test(x));
+  const clear = us.find((x) => /(entschieden|habe mich|werde|endet|steht fest)/i.test(x));
+  const sq = empathic || clear || us[0] || fallback;
+  const sk = empathic && sq === empathic ? "empathie" : "klarheit";
+  const hedged = us.find((x) => x.match(HEDGES));
+  const longest = [...us].sort((a, b) => b.length - a.length)[0];
+  const iq = hedged || (longest !== sq ? longest : us[1]) || fallback;
+  const rw = iq.replace(HEDGES, "").replace(/\s{2,}/g, " ").replace(/\s+([,.!?])/g, "$1").trim() || iq;
+  const diff = other.find((l) => /(warum|wieso|nicht dein ernst|akzeptiere|prüfen|entschieden\?)/i.test(l)) || other.find((l) => l.includes("?")) || other[0] || "—";
+  return {
+    strength: { quote: sq, observation: sk === "empathie" ? "Du sprichst die Perspektive des Gegenübers an, ohne von deiner Entscheidung abzurücken." : "Du benennst die Entscheidung direkt – das schafft Klarheit, worum es geht.", skill: sk },
+    improvement: { quote: iq, observation: hedged ? "Abschwächende Wörter lassen offen, ob die Entscheidung feststeht. Das kann zu weiteren Verhandlungsversuchen einladen." : "Der Satz ist recht lang; die Kernaussage könnte im Gesprächsfluss untergehen.", skill: hedged ? "grenzsetzung" : "klarheit" },
+    alternative: { original: iq, rewrite: hedged ? rw : (sentences(rw)[0] || rw), why: "Kürzer und ohne Weichmacher – in deinen eigenen Worten." },
+    difficultMoment: { counterpartLine: diff, whyDifficult: "Hier wird die Entscheidung direkt infrage gestellt – ein guter Moment, um Klarheit und Empathie zu verbinden." },
+    legalNotice: "",
+  };
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ---------------- Coaching-Engine ----------------
+function pickProvider(s) {
+  if (s.provider === "claude" && !claudeUsable()) throw { code: "not_granted" };
+  return s.provider;
+}
+async function runInterview(s) {
+  let out;
+  if (pickProvider(s) === "claude") {
+    out = await sampleFn.json(interviewPromptText(s), { modelTier: s.tier || "default", cache: false });
+  } else { await wait(500); out = mockInterview(s); }
+  const qs = (Array.isArray(out?.questions) ? out.questions : [])
+    .filter((q) => q && typeof q.question === "string" && q.question.trim())
+    .slice(0, 5)
+    .map((q, i) => ({ id: `q${i + 1}`, prime: PRIME[q.prime] ? q.prime : "purpose", question: q.question.trim(), why: String(q.why || "") }));
+  if (!qs.length) throw { code: "invalid_json" };
+  const u = s.setup;
+  const legal = String(out.legalNotice || "").trim() || (mentionsLegal(u.situation, u.goal, u.difficultMoments, u.relationship) ? LEGAL_NOTICE : "");
+  return { questions: qs, legalNotice: legal || null };
+}
+async function runCounterpart(s, round, onText, signal) {
+  if (pickProvider(s) === "claude") {
+    const r = await sampleFn(counterpartPromptText(s, round), { modelTier: "quick", cache: false, signal, onText: ({ text }) => onText(text) });
+    return r.text.trim().replace(/^GEGENÜBER:\s*/i, "").replace(/^["„]|["“]$/g, "");
+  }
+  const text = mockCounterpart(s, round);
+  let acc = "";
+  for (const w of text.split(/(?<= )/)) { if (signal?.aborted) throw { code: "cancelled" }; await wait(30); acc += w; onText(acc); }
+  return text;
+}
+async function runFeedback(s, round, prevLines) {
+  let out;
+  if (pickProvider(s) === "claude") {
+    out = await sampleFn.json(feedbackPromptText(s, round, prevLines), { modelTier: s.tier || "default", cache: false });
+  } else { await wait(600); out = mockFeedback(round); }
+  const ok = (o, k) => o && typeof o[k] === "string" && o[k].trim();
+  if (!ok(out?.strength, "quote") || !ok(out?.improvement, "quote") || !ok(out?.alternative, "rewrite") || !ok(out?.difficultMoment, "counterpartLine")) throw { code: "invalid_json" };
+  const userT = round.turns.filter((t) => t.role === "user").map((t) => t.content);
+  const otherT = round.turns.filter((t) => t.role === "assistant").map((t) => t.content);
+  const skill = (x) => (SKILLS[x] ? x : "klarheit");
+  const legal = String(out.legalNotice || "").trim() || (mentionsLegal(...userT, ...otherT) ? LEGAL_NOTICE : "");
+  return {
+    strength: { quote: out.strength.quote, observation: String(out.strength.observation || ""), skill: skill(out.strength.skill), quoteVerified: quoteAppearsIn(out.strength.quote, userT) },
+    improvement: { quote: out.improvement.quote, observation: String(out.improvement.observation || ""), skill: skill(out.improvement.skill), quoteVerified: quoteAppearsIn(out.improvement.quote, userT) },
+    alternative: { original: String(out.alternative.original || out.improvement.quote), rewrite: out.alternative.rewrite, why: String(out.alternative.why || "") },
+    difficultMoment: { counterpartLine: out.difficultMoment.counterpartLine, whyDifficult: String(out.difficultMoment.whyDifficult || ""), lineVerified: otherT.length ? quoteAppearsIn(out.difficultMoment.counterpartLine, otherT) : false },
+    legalNotice: legal || null,
+  };
+}
+function markDisclosed(id) {
+  update(id, (s) => ({ ...s, disclosedTo: s.disclosedTo.includes(s.provider) ? s.disclosedTo : [...s.disclosedTo, s.provider] }), false);
+}
+
+// ---------------- UI-Zustand ----------------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+const TTS = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+const VOICE_HINT = "Spracheingabe: Dein Browser wandelt Gesprochenes in Text um. Chrome und Edge nutzen dafür einen Cloud-Dienst, vertrauliche Details also lieber tippen.";
+const ui = { tts: false, view: "home", id: null, form: null, busy: {}, errors: {}, confirmDel: null, confirmAll: false, streaming: null, streamCtl: null, consent: null };
+
+function go(view, id = null) {
+  ui.view = view; ui.id = id; ui.errors = {}; ui.confirmDel = null; ui.confirmAll = false;
+  if (ui.streamCtl) { ui.streamCtl.abort(); ui.streamCtl = null; ui.streaming = null; }
+  render();
+  window.scrollTo(0, 0);
+}
+
+// ---------------- Rendering ----------------
+const legalBox = (t) => `<div class="note note-legal" role="note"><b>Keine Rechtsberatung</b><br>${esc(t || LEGAL_NOTICE)}</div>`;
+const errBox = (m, action) => `<div class="note note-err" role="alert"><span>${esc(m)}</span>${action ? `<button class="linkbtn" data-act="${action}">Erneut versuchen</button>` : ""}</div>`;
+const spinner = (t) => `<div class="spin" role="status">${esc(t)}</div>`;
+const MIC_SVG = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>`;
+const micBtn = (target, disabled) => `<button type="button" class="mic" data-mic="${target}" aria-pressed="false" aria-label="Spracheingabe starten" title="${SR ? "Mit der Stimme antworten" : "Spracheingabe wird in dieser Ansicht nicht unterstützt (Chrome, Edge oder Safari, direkt geöffnet)."}"${!SR || disabled ? " disabled" : ""}>${MIC_SVG}</button>`;
+const coachPanel = (title, body) => `<section class="panel panel-coach"><div class="ph"><span class="tag">Coach</span><span class="t">${esc(title)}</span></div><div class="pb">${body}</div></section>`;
+
+function sessionList(list, deletable) {
+  return `<ul class="list">${list.map((s) => `
+    <li class="item"><div class="item-main">
+      <button class="item-open" data-open="${esc(s.id)}"><b>${esc(s.title)}</b>
+        <span class="small muted">${esc(SCENARIOS[s.setup.scenario])} · ${fmtDate(s.updatedAt)} · ${esc(PHASE_LABEL[s.phase])}</span></button>
+      ${deletable && ui.confirmDel !== s.id ? `<button class="item-del" data-askdel="${esc(s.id)}" aria-label="Übung löschen">Löschen</button>` : ""}
+    </div>
+    ${ui.confirmDel === s.id ? `<div class="confirm"><span>Diese Übung endgültig löschen?</span><button class="btn btn-ghost" data-act="cancel-del">Abbrechen</button><button class="btn btn-danger" data-del="${esc(s.id)}">Ja, löschen</button></div>` : ""}
+    </li>`).join("")}</ul>`;
+}
+
+const pLockSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+function dossierPreview() {
+  return `<aside class="preview" aria-label="Beispiel eines Dossiers">
+    <p class="eyebrow">Beispiel · erfundene Daten</p>
+    <div class="pv-score"><b>Fast bereit: nachschärfen</b><span class="pv-num">78<small> / 100</small></span></div>
+    <div class="pv-bars"><div><span>Ziel &amp; Botschaft</span><i style="width:90%"></i></div><div><span>Grenzen &amp; Spielraum</span><i style="width:55%"></i></div><div><span>Reaktionen unter Druck</span><i style="width:72%"></i></div></div>
+    <p class="pv-card"><span class="eyebrow">Wenn-dann-Karte · Gegenangebot</span>„Danke, das ist ein Zeichen von Wertschätzung. Meine Entscheidung steht, und ein Angebot ändert sie nicht.“</p>
+    <p class="pv-foot">Dein Dossier enthält Drehbuch, Checkliste und Nachbereitung.</p>
+  </aside>`;
+}
+function viewHome() {
+  const recent = [...memSessions].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 3);
+  const steps = [["Situation", "Du beschreibst kurz, worum es geht."], ["Rückfragen", "Der Coach fragt gezielt nach – nichts wird erfunden."], ["Einstieg", "Du formulierst deinen ersten Satz selbst."], ["Rollenspiel", "Die KI spielt dein Gegenüber – leicht, mittel oder schwer."], ["Feedback", "Eine Stärke, ein Punkt zum Verbessern, eine Alternative."], ["Wiederholen", "Du übst den schwierigen Moment und legst deinen nächsten Schritt fest."]];
+  return `
+  <section class="hero hero-split">
+    <div class="hero-main">
+      <p class="eyebrow lockline">${pLockSvg}Vertraulich · bleibt auf deinem Gerät</p>
+      <h1>Geh in jedes schwierige Gespräch vorbereitet.</h1>
+      <p class="lead">Kündigung, Trennung, Verhandlung, Ausstieg: Der Coach grillt dich vorab, spielt die härtesten Reaktionen durch und baut aus deinen eigenen Worten ein Gesprächs-Dossier. Auch ohne Internet.</p>
+      <button class="btn btn-primary btn-block" data-go="prep" style="font-size:16px">Gespräch vorbereiten</button>
+      <button class="btn btn-block btn-onhero" data-go="form">Nur im Rollenspiel üben</button>
+      <p class="eyebrow dur">Vorbereitung ca. 30 Minuten · Rollenspiel ca. 10 Minuten</p>
+    </div>
+    ${dossierPreview()}
+  </section>
+  <ol class="flow" aria-label="Ablauf">${steps.map(([t], i) => `<li${i === 0 ? ' class="first"' : ""}>${t}</li>`).join("")}</ol>
+  ${recent.length ? `<section class="stack"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Zuletzt geübt</h2><button class="linkbtn" data-go="history">Ganzer Verlauf</button></div>${sessionList(recent, false)}</section>` : ""}
+  <section class="stack fine"><h2>Datenschutz und Grenzen</h2><p class="small muted">Der Coach ersetzt keine Rechtsberatung. Übungen werden nur in diesem Browser gespeichert und lassen sich im Verlauf jederzeit löschen. Mit Claude als Anbieter werden die Inhalte über das Claude-Konto der Person verarbeitet, die diese Seite geöffnet hat. Wer die KI testen möchte, meldet sich dafür bei Claude an; ohne KI läuft die Offline-Version.</p></section>`;
+}
+
+function blankForm() { return { scenario: "trennung-mitarbeitende", difficulty: "mittel", situation: "", relationship: "", counterpartLabel: "", goal: "", difficultMoments: "", experience: "", writingSample: "" }; }
+
+function viewForm() {
+  const f = ui.form || (ui.form = blankForm());
+  const ph = PLACEHOLDER[f.scenario];
+  const legal = mentionsLegal(f.situation, f.goal, f.difficultMoments, f.relationship);
+  const p = effectiveProvider();
+  return `
+  <form id="setup-form" class="stack-lg" novalidate>
+    <div class="stack" style="gap:6px"><h1>Gesprächssituation</h1><p class="muted small">Ein paar Sätze reichen. Der Coach fragt anschließend gezielt nach.</p>
+      <div><button type="button" class="linkbtn small" data-act="example">Beispiel einsetzen</button></div></div>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="lbl">Worum geht es?</legend>
+      <div class="choice">${Object.entries(SCENARIOS).map(([k, v]) => `<button type="button" class="pill" data-scenario="${k}" aria-pressed="${f.scenario === k}">${v}</button>`).join("")}</div></fieldset>
+    <div><label class="lbl" for="f-situation">Situation</label><textarea id="f-situation" data-f="situation" rows="3" class="field" placeholder="${esc(ph[0])}">${esc(f.situation)}</textarea></div>
+    <div><label class="lbl" for="f-relationship">Beziehung zum Gegenüber</label><textarea id="f-relationship" data-f="relationship" rows="2" class="field" placeholder="${esc(ph[1])}">${esc(f.relationship)}</textarea></div>
+    <div><label class="lbl" for="f-counterpart">Gegenüber <span class="muted" style="font-weight:400">(optional)</span></label><input id="f-counterpart" data-f="counterpartLabel" class="field" maxlength="80" placeholder="z. B. Teamleiterin Sabine" value="${esc(f.counterpartLabel)}"></div>
+    <div><label class="lbl" for="f-goal">Dein Gesprächsziel</label><textarea id="f-goal" data-f="goal" rows="2" class="field" placeholder="${esc(ph[2])}">${esc(f.goal)}</textarea></div>
+    <div><label class="lbl" for="f-difficult">Schwierige Momente, die du erwartest</label><textarea id="f-difficult" data-f="difficultMoments" rows="2" class="field" placeholder="${esc(ph[3])}">${esc(f.difficultMoments)}</textarea></div>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="lbl">Schwierigkeit des Gegenübers</legend>
+      <div class="choice choice-3">${Object.keys(DIFFICULTIES).map((d) => `<button type="button" class="pill diff" data-difficulty="${d}" aria-pressed="${f.difficulty === d}">${d}</button>`).join("")}</div>
+      <p class="hint">${esc(DIFFICULTIES[f.difficulty])}</p></fieldset>
+    <details class="more"${f.experience || f.writingSample ? " open" : ""}><summary>Erfahrungen &amp; Schreibprobe <span class="muted" style="font-weight:400">(optional)</span></summary><div>
+      <div><label class="lbl" for="f-exp">Konkrete Erfahrungen mit ähnlichen Gesprächen</label><textarea id="f-exp" data-f="experience" rows="3" class="field" placeholder="Was lief schon einmal gut oder schwierig? Was hast du damals gesagt?">${esc(f.experience)}</textarea></div>
+      <div><label class="lbl" for="f-sample">Schreibprobe</label><textarea id="f-sample" data-f="writingSample" rows="4" class="field" placeholder="z. B. eine E-Mail oder Nachricht von dir. Hilft, Vorschläge an deine Stimme anzupassen.">${esc(f.writingSample)}</textarea><p class="hint">Entferne Namen und vertrauliche Details, bevor du Text einfügst.</p></div>
+    </div></details>
+    <div id="form-legal">${legal ? legalBox() : ""}</div>
+    ${ui.errors.form ? errBox(ui.errors.form) : ""}
+    <div class="stack" style="gap:6px"><button type="submit" class="btn btn-primary btn-block">Weiter zu den Rückfragen</button>
+      <p class="small muted" style="text-align:center">KI: ${esc(providerText(p, effectiveTier()))}${sampleState === "pending" ? " · prüfe Claude-Verfügbarkeit …" : ""}</p></div>
+  </form>`;
+}
+
+function progress(phase) {
+  const idx = PHASE_STEP[phase];
+  return `<ol class="progress" aria-label="Fortschritt">${STEP_ORDER.map((l, i) => `<li class="${i < idx ? "done" : i === idx ? "cur" : ""}"${i === idx ? ' aria-current="step"' : ""}><div class="bar"></div><span class="pl">${l}</span></li>`).join("")}</ol>`;
+}
+
+function viewSession() {
+  const s = getSession(ui.id);
+  if (!s) return `<div class="panel pb stack" style="border:1px solid var(--line)"><p>Diese Übung gibt es nicht mehr.</p><button class="btn btn-primary" data-go="form">Neue Übung</button></div>`;
+  const eff = effectiveProvider(), effTier = effectiveTier();
+  const mismatch = eff !== s.provider || (eff === "claude" && effTier !== (s.tier || "default"));
+  const claudeGone = s.provider === "claude" && !claudeUsable() && sampleState !== "pending";
+  return `
+  <header class="stack" style="gap:10px">
+    <div><p class="eyebrow" style="letter-spacing:.02em;text-transform:none;font-size:13px">${esc(SCENARIOS[s.setup.scenario])}</p><h1 style="font-size:21px">${esc(s.title)}</h1></div>
+    ${progress(s.phase)}
+    <p class="small muted">KI: ${esc(providerText(s.provider, s.tier))}</p>
+    ${claudeGone ? `<div class="banner"><span>Claude ist in dieser Ansicht nicht verfügbar.</span><button class="linkbtn" data-act="switch-mock">Mit Mock fortfahren</button></div>`
+      : mismatch ? `<div class="banner"><span>In den Einstellungen ist <b>${esc(providerText(eff, effTier))}</b> gewählt.</span><button class="linkbtn" data-act="switch-settings">Für diese Übung wechseln</button></div>` : ""}
+  </header>
+  ${phaseView(s)}`;
+}
+
+function phaseView(s) {
+  switch (s.phase) {
+    case "interview": return viewInterview(s);
+    case "opening": return viewOpening(s);
+    case "roleplay": case "repeat": return viewRoleplay(s);
+    case "feedback": case "repeat-feedback": return viewFeedbackStep(s);
+    case "next-step": return viewNextStep(s);
+    case "done": return viewDone(s);
+  }
+  return "";
+}
+
+function viewInterview(s) {
+  let body = "";
+  if (ui.busy.interview) body += spinner(s.provider === "claude" ? "Der Coach liest deine Angaben … (kann bis zu einer Minute dauern)" : "Der Coach liest deine Angaben …");
+  if (ui.errors.interview) body += errBox(ui.errors.interview, "retry-interview");
+  if (s.interview) {
+    body += `<div class="stack-lg"><p class="small muted">Beantworte, was du weißt – alles ist optional. Je konkreter, desto realistischer wird die Übung.</p>
+      ${s.interview.questions.map((q) => `<div><label for="a-${q.id}" style="display:block">
+        <span class="eyebrow" style="font-size:11px">${esc(PRIME[q.prime])}</span>
+        <b style="display:block;margin-top:2px">${esc(q.question)}</b>${q.why ? `<span class="small muted" style="display:block">${esc(q.why)}</span>` : ""}</label>
+        <textarea id="a-${q.id}" data-answer="${q.id}" rows="2" class="field" style="margin-top:8px">${esc(s.answers[q.id] || "")}</textarea></div>`).join("")}
+      ${s.interview.legalNotice ? legalBox(s.interview.legalNotice) : ""}
+      <button class="btn btn-primary btn-block" data-act="to-opening">Weiter zum Gesprächseinstieg</button></div>`;
+  } else if (!ui.busy.interview && !ui.errors.interview) {
+    body += `<div class="stack"><p>Der Coach stellt dir jetzt ein paar gezielte Fragen zu deiner Situation.</p><button class="btn btn-primary" data-act="retry-interview">Rückfragen holen</button></div>`;
+  }
+  return coachPanel("Ein paar Rückfragen", body);
+}
+
+function viewOpening(s) {
+  const retry = s.rounds.length > 0;
+  const lastFb = s.rounds[s.rounds.length - 1]?.feedback;
+  return coachPanel(retry ? "Noch einmal üben" : "Dein Gesprächseinstieg", `<div class="stack-lg">
+    <p>Schreib die ersten ein, zwei Sätze so, wie du sie wirklich sagen würdest. Der Coach formuliert sie bewusst nicht für dich.</p>
+    <ul class="small muted" style="margin:0;padding-left:18px"><li>Kommt die Kernbotschaft früh?</li><li>Ist klar, ob die Entscheidung feststeht?</li><li>Klingt es nach dir?</li></ul>
+    ${retry && lastFb ? `<p class="note" style="background:var(--accent-soft)">Letzter Verbesserungspunkt: ${esc(lastFb.improvement.observation)}</p>` : ""}
+    <div><label class="lbl" for="opening">Dein Einstieg</label><div class="mic-wrap"><textarea id="opening" data-opening rows="4" class="field" style="resize:none" placeholder="Ich beginne mit …">${esc(s.openingDraft ?? s.opening)}</textarea>${micBtn("opening")}</div><p class="hint">${VOICE_HINT}</p></div>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="lbl">Schwierigkeit</legend>
+      <div class="choice choice-3">${Object.keys(DIFFICULTIES).map((d) => `<button type="button" class="pill diff" data-sdiff="${d}" aria-pressed="${s.setup.difficulty === d}">${d}</button>`).join("")}</div></fieldset>
+    <button class="btn btn-primary btn-block" data-act="start-roleplay" id="start-rp"${(s.openingDraft ?? s.opening).trim() ? "" : " disabled"}>Rollenspiel starten</button>
+  </div>`);
+}
+
+function bubble(t, who, id) {
+  const me = t.role === "user";
+  return `<div class="bubble ${me ? "me" : "them"}"${id ? ` id="${id}"` : ""}><span class="who">${me ? "Du" : esc(who)}</span><span class="txt">${esc(t.content)}</span></div>`;
+}
+
+function viewRoleplay(s) {
+  const round = s.rounds[s.rounds.length - 1];
+  const repeat = round.kind === "wiederholung";
+  const who = s.setup.counterpartLabel || "Gegenüber";
+  const userTurns = round.turns.filter((t) => t.role === "user").length;
+  const awaiting = round.turns[round.turns.length - 1]?.role === "user";
+  const streaming = ui.streaming !== null;
+  const canEnd = !streaming && userTurns >= 1 && (repeat || round.turns.some((t) => t.role === "assistant"));
+  return `<section class="panel panel-role">
+    <div class="ph"><span class="tag">Rollenspiel</span><span class="t">${repeat ? "Wiederholung des schwierigen Moments" : `Du sprichst mit: ${esc(who)}`}</span><span class="r">Schwierigkeit: ${esc(s.setup.difficulty)}</span></div>
+    <p class="small muted" style="padding:8px 16px 0">${esc(DIFFICULTIES[s.setup.difficulty])} · Die KI spielt nur das Gegenüber, ohne Kommentare.</p>
+    ${TTS ? `<label class="ttsrow"><input type="checkbox" data-tts${ui.tts ? " checked" : ""}> Antworten von ${esc(who)} vorlesen</label>` : ""}
+    <div class="chat" id="chat">
+      ${round.turns.map((t) => bubble(t, who)).join("")}
+      ${streaming ? bubble({ role: "assistant", content: ui.streaming || (s.provider === "claude" ? "denkt nach …" : "…") }, who, "stream-bubble") : ""}
+      ${ui.errors.roleplay ? errBox(ui.errors.roleplay, "retry-reply") : ""}
+    </div>
+    <form class="composer" id="rp-form">
+      <label for="rp-input" class="sr">Deine Antwort</label>
+      <div class="mic-wrap"><textarea id="rp-input" rows="2" class="field" style="resize:none" placeholder="${awaiting ? "Warte auf die Antwort …" : "Was sagst du?"}"${streaming || userTurns >= MAX_USER_TURNS ? " disabled" : ""}>${esc(s.chatDraft || "")}</textarea>${micBtn("rp-input", streaming || userTurns >= MAX_USER_TURNS)}</div>
+      <p class="hint">${VOICE_HINT}</p>
+      <button type="submit" class="btn btn-primary btn-block" id="rp-send" style="font-size:16px"${streaming || awaiting || !(s.chatDraft || "").trim() ? " disabled" : ""}>Senden</button>
+      <button type="button" class="btn btn-quiet" data-act="end-roleplay" style="align-self:center"${canEnd ? "" : " disabled"}>${repeat ? "Kurzfeedback" : "Beenden &amp; Feedback"}</button>
+      ${streaming && s.provider === "claude" ? `<button type="button" class="linkbtn small" data-act="stop-stream" style="align-self:center">Antwort abbrechen</button>` : ""}
+      ${userTurns >= 6 ? `<p class="hint" style="text-align:center">${userTurns >= MAX_USER_TURNS ? "Maximale Länge erreicht – hol dir jetzt Feedback." : "Guter Zeitpunkt für Feedback."}</p>` : ""}
+    </form></section>`;
+}
+
+function feedbackView(fb, title) {
+  const q = (t, v) => `<blockquote>„${esc(t)}“${v ? "" : ` <span class="unv" title="Im Transkript nicht wörtlich gefunden">(nicht wörtlich belegt)</span>`}</blockquote>`;
+  return `<section class="panel panel-fb"><div class="ph"><span class="tag">Coach</span><span class="t">${esc(title)}</span></div><div class="pb">
+    <div class="fbsec"><div class="fbh"><span class="dot" style="background:var(--coach)"></span><h3>Stärke</h3><span class="chip">${esc(SKILLS[fb.strength.skill])}</span></div>${q(fb.strength.quote, fb.strength.quoteVerified)}<p>${esc(fb.strength.observation)}</p></div>
+    <div class="fbsec"><div class="fbh"><span class="dot" style="background:var(--work)"></span><h3>Verbesserungspunkt</h3><span class="chip">${esc(SKILLS[fb.improvement.skill])}</span></div>${q(fb.improvement.quote, fb.improvement.quoteVerified)}<p>${esc(fb.improvement.observation)}</p></div>
+    <div class="fbsec"><div class="fbh"><span class="dot" style="background:var(--accent)"></span><h3>Alternative Formulierung</h3></div><p class="small muted">Statt: „${esc(fb.alternative.original)}“</p><p class="alt">„${esc(fb.alternative.rewrite)}“</p>${fb.alternative.why ? `<p class="small muted">${esc(fb.alternative.why)}</p>` : ""}</div>
+    <div class="fbsec"><div class="fbh"><span class="dot" style="background:var(--work)"></span><h3>Schwieriger Moment</h3></div><p>Gegenüber: <em>„${esc(fb.difficultMoment.counterpartLine)}“</em></p>${fb.difficultMoment.whyDifficult ? `<p class="small muted">${esc(fb.difficultMoment.whyDifficult)}</p>` : ""}</div>
+    ${fb.legalNotice ? legalBox(fb.legalNotice) : ""}
+  </div><p class="small muted" style="border-top:1px solid var(--line);padding:8px 16px">Das Feedback bewertet deine Aussagen. Reaktionen des Gegenübers sind simuliert und keine Aussagen über echte Gefühle.</p></section>`;
+}
+
+const transcriptHtml = (round, who) => `<ol class="transcript">${round.turns.map((t) => `<li><b style="${t.role === "user" ? "" : "color:var(--role)"}">${t.role === "user" ? "Du" : esc(who || "Gegenüber")}:</b> ${esc(t.content)}</li>`).join("")}</ol>`;
+
+function viewFeedbackStep(s) {
+  const round = s.rounds[s.rounds.length - 1];
+  const repeat = round.kind === "wiederholung";
+  return `<div class="divider">Rollenspiel beendet</div>
+    <details class="box"><summary>Transkript ansehen (${round.turns.length} Beiträge)</summary>${transcriptHtml(round, s.setup.counterpartLabel)}</details>
+    ${ui.busy.feedback ? spinner(s.provider === "claude" ? "Der Coach wertet deine Aussagen aus … (kann bis zu einer Minute dauern)" : "Der Coach wertet deine Aussagen aus …") : ""}
+    ${ui.errors.feedback ? errBox(ui.errors.feedback, "retry-feedback") : ""}
+    ${round.feedback ? `${feedbackView(round.feedback, repeat ? "Kurzfeedback zur Wiederholung" : "Feedback")}
+      <div class="stack" style="gap:8px"><button class="btn btn-primary btn-block" data-act="to-next" style="font-size:16px">Nächsten Schritt festlegen</button>
+      <p class="eyebrow muted" style="color:var(--muted);margin-top:6px">Weiter üben</p>
+      <button class="btn btn-opt" data-act="repeat-moment"><span>${repeat ? "Moment noch einmal üben" : "Schwierigen Moment wiederholen"}</span><span class="sub">Nur die Stelle mit der schwierigen Rückfrage</span></button>
+      <button class="btn btn-opt" data-act="to-opening" style="border-color:var(--line)"><span>Noch einmal üben</span><span class="sub">Neuen Einstieg formulieren und das Gespräch neu starten</span></button></div>` : ""}`;
+}
+
+function viewNextStep(s) {
+  return coachPanel("Dein Schritt für das echte Gespräch", `<div class="stack">
+    <p>Was nimmst du dir konkret vor? Formuliere einen Schritt, den du vor oder im echten Gespräch umsetzt.</p>
+    <p class="small muted">Hilfreich ist ein Schritt, der beobachtbar ist – mit Zeitpunkt oder Auslöser.</p>
+    <label class="sr" for="next-step">Mein nächster Schritt</label>
+    <textarea id="next-step" data-next rows="3" class="field">${esc(s.nextDraft ?? s.nextStep ?? "")}</textarea>
+    <button class="btn btn-primary btn-block" data-act="save-next" id="save-next"${(s.nextDraft ?? s.nextStep ?? "").trim() ? "" : " disabled"}>Festlegen</button></div>`);
+}
+
+function viewDone(s) {
+  const last = [...s.rounds].reverse().find((r) => r.feedback);
+  return coachPanel("Geschafft", `<div class="stack-lg">
+      <div><p class="eyebrow" style="font-size:11px">Dein nächster Schritt</p><p style="font-size:17px;font-weight:650;margin-top:4px">${esc(s.nextStep)}</p></div>
+      <div><p class="eyebrow" style="font-size:11px;color:var(--muted)">Dein Einstieg</p><p style="margin-top:4px">„${esc(s.opening)}“</p></div>
+      ${last ? `<div><p class="eyebrow" style="font-size:11px;color:var(--muted)">Alternative aus dem Feedback</p><p style="margin-top:4px">„${esc(last.feedback.alternative.rewrite)}“</p></div>` : ""}
+      <div class="row"><button class="btn btn-primary" data-act="to-opening">Noch einmal üben</button><button class="btn" data-act="to-next">Schritt ändern</button></div></div>`) + `
+    <section class="stack"><h2>Alle Übungen dieser Sitzung</h2>
+      ${s.rounds.map((r, i) => `<details class="box"><summary>${i + 1}. ${r.kind === "wiederholung" ? "Wiederholung" : "Übung"}</summary>${transcriptHtml(r, s.setup.counterpartLabel)}${r.feedback ? `<div style="margin-top:12px">${feedbackView(r.feedback, "Feedback")}</div>` : ""}</details>`).join("")}
+    </section>
+    <button class="btn btn-ghost" data-go="home">Zur Startseite</button>`;
+}
+
+function viewHistory() {
+  const list = [...memSessions].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  return `<div class="stack" style="gap:6px"><h1>Gesprächsverlauf</h1><p class="small muted">Gespeichert nur in diesem Browser. Gelöschte Übungen lassen sich nicht wiederherstellen.</p></div>
+  ${!list.length ? `<div class="panel pb stack" style="border:1px solid var(--line);text-align:center"><p class="muted">Noch keine Übungen gespeichert. Deine erste Übung erscheint hier, sobald du das Formular abschickst.</p><button class="btn btn-primary" data-go="form">Gespräch üben</button></div>` : `
+    ${sessionList(list, true)}
+    <div style="border-top:1px solid var(--line);padding-top:18px">
+      ${!ui.confirmAll ? `<button class="btn btn-danger" data-act="ask-all">Gesamten Verlauf löschen</button>` : `
+      <div class="panel pb stack" style="border:1px solid var(--danger)"><b>Alle ${list.length} Übungen endgültig löschen?</b>
+        <div class="row"><button class="btn" data-act="cancel-all">Abbrechen</button><button class="btn btn-danger" data-act="del-all">Alles löschen</button></div></div>`}
+    </div>`}`;
+}
+
+function viewSettings() {
+  const sel = memSettings.providerId || effectiveProvider();
+  const tier = effectiveTier();
+  const claudeLine = sampleState === "pending" ? "Verfügbarkeit wird geprüft …" : claudeUsable() ? "Echte KI. Nutzt das Claude-Konto der Person, die diese Seite geöffnet hat; beim ersten Aufruf fragt die App um Erlaubnis." : sampleState === "denied" ? "In dieser Ansicht nicht erlaubt. Beim nächsten Öffnen kannst du den Zugriff erlauben." : "KI ist auf dieser Seite nicht angebunden. Die Demo läuft vollständig mit dem lokalen Mock.";
+  const card = (id, label, line, badges, disabled) => `<label class="provider${sel === id ? " sel" : ""}"><input type="radio" name="prov" value="${id}"${sel === id ? " checked" : ""}${disabled ? " disabled" : ""}><div style="min-width:0"><b>${esc(label)}</b><p class="small muted">${esc(line)}</p><div class="badges">${badges.map(([t, on]) => `<span class="badge${on ? "" : " off"}">${t}</span>`).join("")}</div></div></label>`;
+  return `<div class="stack" style="gap:6px"><h1>Einstellungen</h1><p class="small muted">Wähle, wer Coach und Gegenüber spielt. Die Wahl gilt für neue Übungen; bei laufenden Übungen wirst du vor einem Wechsel gefragt.</p></div>
+  <fieldset class="stack" style="border:0;padding:0;margin:0"><legend class="lbl">Anbieter</legend>
+    ${card("claude", PROVIDERS.claude.label, claudeLine, [["Text", true], ["Streaming", true], ["Strukturiert", true], ["Audio", false]], !claudeUsable())}
+    ${card("mock", PROVIDERS.mock.label, "Regelbasierte Beispielantworten. Keine Daten verlassen deinen Browser. Gut zum Ausprobieren.", [["Text", true], ["Streaming", true], ["Strukturiert", true], ["Audio", false]], false)}
+  </fieldset>
+  ${sel === "claude" ? `<div><label class="lbl" for="tier">Modell</label>
+    <select id="tier" class="field">${Object.entries(TIERS).map(([k, v]) => `<option value="${k}"${tier === k ? " selected" : ""}>${v}${k === "quick" ? " – schnellste Antworten" : k === "complex" ? " – genaueres Feedback, langsamer" : " – ausgewogen"}</option>`).join("")}</select>
+    <p class="hint">Gilt für Rückfragen und Feedback. Das Gegenüber antwortet immer mit dem schnellen Modell, damit sich das Rollenspiel flüssig anfühlt.</p></div>` : ""}
+  ${ui.errors.settingsSaved ? `<p class="small" style="color:var(--accent-text)" role="status">Gespeichert.</p>` : ""}
+  <p class="small muted">Diese Demo läuft ohne Server. Auf dieser Seite antwortet der lokale Mock, die KI-Anbindung ist als Konzept vorgesehen.</p>`;
+}
+
+function renderModal() {
+  const root = $("#modal-root");
+  if (!ui.consent) { root.innerHTML = ""; return; }
+  const s = getSession(ui.id);
+  const items = ["Situationsbeschreibung, Beziehung, Ziel und schwierige Momente"];
+  if (s.setup.experience || s.setup.writingSample) items.push("Erfahrungen und Schreibprobe");
+  if (Object.values(s.answers).some(Boolean)) items.push("Antworten auf die Rückfragen");
+  if (s.rounds.length) items.push(`Rollenspiel-Verläufe (${s.rounds.length})`);
+  root.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="c-title"><div class="modal-card">
+    <h2 id="c-title" style="font-size:18px">Verlauf an Claude übertragen?</h2>
+    <p class="small muted">Diese Übung wurde bisher nur lokal mit dem Mock verarbeitet. Wenn du zu <b style="color:var(--ink)">Claude</b> wechselst, werden bei der nächsten Anfrage folgende Inhalte über dein Claude-Konto verarbeitet:</p>
+    <ul class="small">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
+    <button class="btn btn-primary" data-act="consent-yes">Übertragen und wechseln</button>
+    <button class="btn" data-act="consent-no">Beim bisherigen Anbieter bleiben</button>
+    <button class="btn btn-ghost" data-act="consent-new">Neue Übung ohne Verlauf starten</button>
+  </div></div>`;
+  $(".modal-card .btn-primary", root)?.focus();
+}
+
+function addMics() {
+  let n = 0;
+  document.querySelectorAll("#app textarea").forEach((ta) => {
+    if (!ta.id) ta.id = "ta-auto-" + (++n);
+    if (ta.parentElement.classList.contains("mic-wrap")) { if (!ta.parentElement.querySelector(".mic")) ta.parentElement.insertAdjacentHTML("beforeend", micBtn(ta.id, ta.disabled)); return; }
+    const wrap = document.createElement("div"); wrap.className = "mic-wrap";
+    ta.before(wrap); wrap.append(ta);
+    wrap.insertAdjacentHTML("beforeend", micBtn(ta.id, ta.disabled));
+  });
+}
+function render() {
+  const app = $("#app");
+  const views = { prep: viewPrep, prepRun: viewPrepRun, prepDossier: viewPrepDossier, prepAfter: viewPrepAfter, home: viewHome, form: viewForm, session: viewSession, history: viewHistory, settings: viewSettings };
+  app.innerHTML = (views[ui.view] || viewHome)();
+  $("#nav-prep").setAttribute("aria-current", ui.view.startsWith("prep") ? "page" : "false");
+  $("#nav-history").setAttribute("aria-current", ui.view === "history" ? "page" : "false");
+  $("#nav-settings").setAttribute("aria-current", ui.view === "settings" ? "page" : "false");
+  document.body.toggleAttribute("data-wide", ui.view === "home" || ui.view === "prep");
+  addMics();
+  syncMic();
+  pAfterRender();
+  renderModal();
+  if (ui.view === "session") autoStart();
+  const chat = $("#chat"); if (chat) chat.lastElementChild?.scrollIntoView({ block: "nearest" });
+}
+
+// ---------------- Aktionen ----------------
+function createSession() {
+  const f = ui.form;
+  const need = [["situation", "Bitte beschreibe die Situation in ein, zwei Sätzen.", 10], ["relationship", "Bitte beschreibe kurz die Beziehung zum Gegenüber.", 3], ["goal", "Bitte nenne dein Gesprächsziel.", 3], ["difficultMoments", "Welche Momente erwartest du als schwierig?", 3]];
+  for (const [k, msg, min] of need) if ((f[k] || "").trim().length < min) { ui.errors.form = msg; render(); $(`[data-f="${k}"]`)?.focus(); return; }
+  const now = new Date().toISOString();
+  const label = f.counterpartLabel.trim();
+  const p = effectiveProvider();
+  const s = {
+    id: uid(), title: label ? `${SCENARIOS[f.scenario]} – ${label}` : SCENARIOS[f.scenario], createdAt: now, updatedAt: now,
+    setup: { scenario: f.scenario, difficulty: f.difficulty, situation: f.situation.trim(), relationship: f.relationship.trim(), goal: f.goal.trim(), difficultMoments: f.difficultMoments.trim(), counterpartLabel: label || undefined, experience: f.experience.trim() || undefined, writingSample: f.writingSample.trim() || undefined },
+    answers: {}, opening: "", rounds: [], phase: "interview", provider: p, tier: effectiveTier(), disclosedTo: [],
+  };
+  memSessions.unshift(s); persist();
+  ui.form = null;
+  go("session", s.id);
+}
+
+let startedKey = "";
+function autoStart() {
+  const s = getSession(ui.id); if (!s) return;
+  if (s.phase === "interview" && !s.interview && !ui.busy.interview && !ui.errors.interview && startedKey !== s.id + ":i") { startedKey = s.id + ":i"; doInterview(); }
+  if ((s.phase === "roleplay" || s.phase === "repeat") && ui.streaming === null && !ui.errors.roleplay) {
+    const r = s.rounds[s.rounds.length - 1];
+    const key = r.id + ":" + r.turns.length;
+    if (r.turns[r.turns.length - 1]?.role === "user" && startedKey !== key) { startedKey = key; doReply(); }
+  }
+  if ((s.phase === "feedback" || s.phase === "repeat-feedback") && !s.rounds[s.rounds.length - 1].feedback && !ui.busy.feedback && !ui.errors.feedback) {
+    const key = s.rounds[s.rounds.length - 1].id + ":f";
+    if (startedKey !== key) { startedKey = key; doFeedback(); }
+  }
+}
+
+async function doInterview() {
+  const s = getSession(ui.id); ui.busy.interview = true; ui.errors.interview = null; render();
+  try { const interview = await runInterview(s); markDisclosed(s.id); update(s.id, (x) => ({ ...x, interview }), false); }
+  catch (e) { ui.errors.interview = sampleErrorText(e) || "Abgebrochen."; }
+  finally { ui.busy.interview = false; if (ui.view === "session" && ui.id === s.id) render(); }
+}
+
+async function doReply() {
+  const s = getSession(ui.id); const id = s.id;
+  const round = s.rounds[s.rounds.length - 1];
+  const ctl = new AbortController(); ui.streamCtl = ctl; ui.streaming = ""; ui.errors.roleplay = null; render();
+  try {
+    const text = await runCounterpart(s, round, (t) => { if (ui.streamCtl !== ctl) return; ui.streaming = t; const b = $("#stream-bubble .txt"); if (b) { b.textContent = t; b.parentElement.scrollIntoView({ block: "nearest" }); } }, ctl.signal);
+    if (ctl.signal.aborted || !text) throw { code: text ? "cancelled" : "empty_completion" };
+    markDisclosed(id);
+    update(id, (x) => { const rounds = [...x.rounds]; rounds[rounds.length - 1] = { ...rounds[rounds.length - 1], turns: [...round.turns, { role: "assistant", content: text }] }; return { ...x, rounds }; }, false);
+    speak(text);
+  } catch (e) {
+    if (ui.streamCtl === ctl) ui.errors.roleplay = sampleErrorText(e) || "Antwort abgebrochen. Du kannst sie neu anfordern.";
+  } finally {
+    if (ui.streamCtl === ctl) { ui.streamCtl = null; ui.streaming = null; if (ui.view === "session" && ui.id === id) { render(); $("#rp-input")?.focus(); } }
+  }
+}
+
+function findPrevious(round, line) {
+  const t = normalize(line);
+  const i = round.turns.findIndex((x) => x.role === "assistant" && normalize(x.content).includes(t));
+  return i < 0 ? undefined : round.turns.slice(i + 1).find((x) => x.role === "user")?.content;
+}
+function difficultLine(round, fb) {
+  if (fb.difficultMoment.lineVerified) { const t = normalize(fb.difficultMoment.counterpartLine); const full = round.turns.find((x) => x.role === "assistant" && normalize(x.content).includes(t)); return full?.content || fb.difficultMoment.counterpartLine; }
+  const a = round.turns.filter((x) => x.role === "assistant");
+  return (a.find((x) => x.content.includes("?")) || a[a.length - 1])?.content || fb.difficultMoment.counterpartLine;
+}
+
+async function doFeedback() {
+  const s = getSession(ui.id); const id = s.id;
+  const round = s.rounds[s.rounds.length - 1];
+  ui.busy.feedback = true; ui.errors.feedback = null; render();
+  try {
+    const prev = round.repeatOf?.previousUserLine ? [round.repeatOf.previousUserLine] : [];
+    const feedback = await runFeedback(s, round, prev);
+    markDisclosed(id);
+    update(id, (x) => { const rounds = [...x.rounds]; rounds[rounds.length - 1] = { ...rounds[rounds.length - 1], feedback }; return { ...x, rounds }; }, false);
+  } catch (e) { ui.errors.feedback = sampleErrorText(e) || "Abgebrochen."; }
+  finally { ui.busy.feedback = false; if (ui.view === "session" && ui.id === id) render(); }
+}
+
+function switchProvider(target, tier) {
+  const s = getSession(ui.id); if (!s) return;
+  const needsConsent = target === "claude" && s.disclosedTo.length > 0 && !s.disclosedTo.includes("claude");
+  if (needsConsent) { ui.consent = { target, tier }; renderModal(); return; }
+  ui.errors = {}; startedKey = "";
+  update(s.id, (x) => ({ ...x, provider: target, tier }));
+}
+
+document.addEventListener("click", (ev) => {
+  const t = ev.target.closest("button, [data-go], [data-open]");
+  if (!t) return;
+  const d = t.dataset;
+  if (d.mic) { toggleMic(d.mic, t); return; }
+  if (d.go) { if (d.go === "form" && !ui.form) ui.form = blankForm(); go(d.go); return; }
+  if (d.open) { go("session", d.open); return; }
+  if (d.scenario) { ui.form.scenario = d.scenario; render(); return; }
+  if (d.difficulty) { ui.form.difficulty = d.difficulty; render(); return; }
+  if (d.sdiff) { update(ui.id, (s) => ({ ...s, setup: { ...s.setup, difficulty: d.sdiff } })); return; }
+  if (d.askdel) { ui.confirmDel = d.askdel; render(); return; }
+  if (d.del) { memSessions = memSessions.filter((s) => s.id !== d.del); persist(); ui.confirmDel = null; render(); return; }
+  const s = ui.id ? getSession(ui.id) : null;
+  switch (d.act) {
+    case "example": ui.form = { ...EXAMPLE }; ui.errors.form = null; render(); break;
+    case "cancel-del": ui.confirmDel = null; render(); break;
+    case "ask-all": ui.confirmAll = true; render(); break;
+    case "cancel-all": ui.confirmAll = false; render(); break;
+    case "del-all": memSessions = []; persist(); ui.confirmAll = false; render(); break;
+    case "retry-interview": startedKey = ""; ui.errors.interview = null; doInterview(); break;
+    case "retry-reply": ui.errors.roleplay = null; startedKey = ""; render(); break;
+    case "retry-feedback": ui.errors.feedback = null; startedKey = ""; render(); break;
+    case "stop-stream": ui.streamCtl?.abort(); break;
+    case "to-opening": update(s.id, (x) => ({ ...x, phase: "opening", openingDraft: undefined })); break;
+    case "to-next": update(s.id, (x) => ({ ...x, phase: "next-step" })); break;
+    case "start-roleplay": {
+      const opening = (s.openingDraft ?? s.opening).trim(); if (!opening) break;
+      const round = { id: uid(), kind: "uebung", startedAt: new Date().toISOString(), turns: [{ role: "user", content: opening }] };
+      update(s.id, (x) => ({ ...x, opening, openingDraft: undefined, chatDraft: "", rounds: [...x.rounds, round], phase: "roleplay" }));
+      break;
+    }
+    case "end-roleplay": ui.errors = {}; update(s.id, (x) => ({ ...x, chatDraft: "", phase: x.phase === "repeat" ? "repeat-feedback" : "feedback" })); window.scrollTo(0, 0); break;
+    case "repeat-moment": {
+      const round = s.rounds[s.rounds.length - 1]; const repeat = round.kind === "wiederholung";
+      const base = repeat ? round.repeatOf.counterpartLine : difficultLine(round, round.feedback);
+      const prevLine = repeat ? round.turns.find((x) => x.role === "user")?.content : findPrevious(round, base);
+      const next = { id: uid(), kind: "wiederholung", startedAt: new Date().toISOString(), turns: [{ role: "assistant", content: base }], repeatOf: { counterpartLine: base, previousUserLine: prevLine } };
+      ui.errors = {}; update(s.id, (x) => ({ ...x, chatDraft: "", rounds: [...x.rounds, next], phase: "repeat" }));
+      break;
+    }
+    case "save-next": { const v = (s.nextDraft ?? "").trim() || (s.nextStep || "").trim(); if (v) update(s.id, (x) => ({ ...x, nextStep: v, nextDraft: undefined, phase: "done" })); break; }
+    case "switch-settings": switchProvider(effectiveProvider(), effectiveTier()); break;
+    case "switch-mock": ui.errors = {}; startedKey = ""; update(s.id, (x) => ({ ...x, provider: "mock" })); break;
+    case "consent-yes": { const c = ui.consent; ui.consent = null; ui.errors = {}; startedKey = ""; update(s.id, (x) => ({ ...x, provider: c.target, tier: c.tier })); break; }
+    case "consent-no": ui.consent = null; renderModal(); break;
+    case "consent-new": ui.consent = null; ui.form = blankForm(); go("form"); break;
+  }
+});
+
+document.addEventListener("input", (ev) => {
+  const el = ev.target, d = el.dataset;
+  if (d.f && ui.form) {
+    ui.form[d.f] = el.value;
+    if (["situation", "goal", "difficultMoments", "relationship"].includes(d.f)) { const f = ui.form; $("#form-legal").innerHTML = mentionsLegal(f.situation, f.goal, f.difficultMoments, f.relationship) ? legalBox() : ""; }
+    return;
+  }
+  if (d.answer) { update(ui.id, (s) => ({ ...s, answers: { ...s.answers, [d.answer]: el.value } }), false); return; }
+  if ("opening" in d) { update(ui.id, (s) => ({ ...s, openingDraft: el.value }), false); $("#start-rp").disabled = !el.value.trim(); return; }
+  if ("next" in d) { update(ui.id, (s) => ({ ...s, nextDraft: el.value }), false); $("#save-next").disabled = !el.value.trim(); return; }
+  if (el.id === "rp-input") {
+    update(ui.id, (s) => ({ ...s, chatDraft: el.value }), false);
+    const s = getSession(ui.id), r = s.rounds[s.rounds.length - 1];
+    $("#rp-send").disabled = !el.value.trim() || ui.streaming !== null || r.turns[r.turns.length - 1]?.role === "user";
+  }
+});
+
+document.addEventListener("change", (ev) => {
+  const el = ev.target;
+  if (el.name === "prov") { memSettings.providerId = el.value; persist(); ui.errors.settingsSaved = true; render(); }
+  if ("tts" in el.dataset) { ui.tts = el.checked; if (!ui.tts) { try { speechSynthesis.cancel(); } catch {} } }
+  if (el.id === "tier") { memSettings.tier = el.value; persist(); ui.errors.settingsSaved = true; render(); }
+});
+
+document.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  if (ev.target.id === "setup-form") { createSession(); return; }
+  if (ev.target.id === "rp-form") sendChat();
+});
+document.addEventListener("keydown", (ev) => {
+  if (ev.target.id === "rp-input" && ev.key === "Enter" && !ev.shiftKey && !matchMedia("(pointer: coarse)").matches) { ev.preventDefault(); sendChat(); }
+  if (ev.key === "Escape" && ui.consent) { ui.consent = null; renderModal(); }
+});
+// ---------------- Sprache (Browser-Spracheingabe / -ausgabe, optional) ----------------
+// Eine durchgehende Sitzung: Das Mikro wird einmal gestartet und bleibt an – auch beim Wechsel zwischen Feldern
+// und bei Neuzeichnen der Seite. So fragt der Browser höchstens einmal pro Seitenaufruf nach der Freigabe.
+let rec = null, micOn = false, micTarget = null, micBase = "", micSkip = 0, micCount = 0, micFails = 0;
+const MIC_MSG = { "not-allowed": (window.self !== window.top ? "In dieser eingebetteten Ansicht darf der Browser dem Mikrofon keinen Dauerzugriff geben. Öffne die Seite direkt über ihre https-Adresse, dann genügt eine einzige Freigabe." : "Mikrofon ist hier gesperrt. Erlaube den Zugriff in der Adresszeile (Schloss-Symbol → Mikrofon → Zulassen)."), "service-not-allowed": "Spracherkennung ist hier gesperrt.", "no-speech": "", "audio-capture": "Es wurde kein Mikrofon gefunden.", network: "Spracherkennung braucht eine Internetverbindung." };
+function micNote(m) {
+  const btn = micTarget && document.querySelector('.mic[data-mic="' + micTarget + '"]') || document.querySelector(".mic");
+  if (!btn) return;
+  const box = btn.parentElement; let n = box.nextElementSibling;
+  if (!n || !n.classList.contains("voice-msg")) { if (!m) return; n = document.createElement("p"); n.className = "voice-msg"; n.setAttribute("role", "alert"); box.after(n); }
+  n.textContent = m || "";
+}
+function micPaint() {
+  document.querySelectorAll(".mic").forEach((b) => {
+    const on = micOn && b.dataset.mic === micTarget;
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-label", on ? "Spracheingabe beenden" : "Spracheingabe starten");
+  });
+}
+function micRetarget(id) {
+  const el = document.getElementById(id); if (!el) return false;
+  micTarget = id; micBase = el.value.trim(); micSkip = micCount; micPaint(); return true;
+}
+function micOpen() {
+  const r = new SR(); r.lang = "de-DE"; r.continuous = true; r.interimResults = true;
+  micCount = 0; micSkip = 0; const t0 = Date.now();
+  r.onresult = (e) => {
+    if (rec !== r) return;
+    micCount = e.results.length; micFails = 0;
+    const el = document.getElementById(micTarget); if (!el) return;
+    let text = ""; for (let i = micSkip; i < e.results.length; i++) text += e.results[i][0].transcript;
+    el.value = (micBase ? micBase + " " : "") + text.trim();
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+  r.onerror = (e) => {
+    if (e.error === "aborted" || e.error === "no-speech") return;
+    micNote(MIC_MSG[e.error] || "Spracheingabe ist fehlgeschlagen.");
+    if (e.error === "not-allowed" || e.error === "service-not-allowed" || e.error === "audio-capture") stopMic();
+  };
+  r.onend = () => {
+    if (rec !== r) return;
+    rec = null;
+    // Der Browser beendet die Erkennung nach Stille von selbst – solange das Mikro an ist, nahtlos neu starten.
+    // Nur bei Sofort-Abbrüchen (unter 1 s ohne Ergebnis) zählen; normale Sprechpausen starten unbegrenzt neu.
+    if (micOn && (Date.now() - t0 > 1000 || ++micFails <= 4)) setTimeout(() => { if (micOn && !rec) { const el = document.getElementById(micTarget); micBase = el ? el.value.trim() : ""; try { rec = micOpen(); } catch { stopMic(); } } }, 150);
+    else stopMic();
+  };
+  r.start(); rec = r; return r;
+}
+function stopMic() {
+  micOn = false; micTarget = null; micFails = 0;
+  if (rec) { const r = rec; rec = null; try { r.abort(); } catch {} }
+  micPaint();
+}
+// Nach dem Neuzeichnen: Sitzung behalten und an das Feld wieder anhängen.
+function syncMic() {
+  if (!micOn) { micPaint(); return; }
+  if (!micRetarget(micTarget)) stopMic();
+}
+function toggleMic(targetId, btn) {
+  if (micOn && micTarget === targetId) { stopMic(); return; }
+  if (!SR) return;
+  try { speechSynthesis.cancel(); } catch {}
+  micNote("");
+  if (micOn) { micRetarget(targetId); return; }   // läuft schon: nur das Zielfeld wechseln, keine neue Freigabe nötig
+  micOn = true; micTarget = targetId; micFails = 0;
+  const el = document.getElementById(targetId); micBase = el ? el.value.trim() : "";
+  try { micOpen(); micPaint(); }
+  catch { micOn = false; micTarget = null; micNote("Spracheingabe konnte nicht gestartet werden."); micPaint(); return; }
+  const insecure = !(window.isSecureContext) || location.protocol === "file:" || location.href === "about:srcdoc";
+  if (insecure) micNote("Hinweis: In dieser Umgebung fragt der Browser bei jedem Start neu nach dem Mikrofon. Über https:// oder localhost wird die Freigabe dauerhaft gemerkt.");
+  else if (navigator.permissions) navigator.permissions.query({ name: "microphone" }).then((p) => { if (p.state === "denied") micNote(MIC_MSG["not-allowed"]); }).catch(() => {});
+}
+// Auswahl eines anderen Feldes während das Mikro läuft: Eingabe folgt dem Fokus.
+document.addEventListener("focusin", (ev) => { if (micOn && ev.target.tagName === "TEXTAREA" && ev.target.id && ev.target.id !== micTarget && !ev.target.disabled) micRetarget(ev.target.id); });
+function speak(text) {
+  if (!TTS || !ui.tts) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "de-DE"; speechSynthesis.speak(u); } catch {}
+}
+
+function sendChat() {
+  if (ui.tts) stopMic(); try { TTS && speechSynthesis.cancel(); } catch {}
+  const s = getSession(ui.id); const text = (s.chatDraft || "").trim();
+  const r = s.rounds[s.rounds.length - 1];
+  if (!text || ui.streaming !== null || r.turns[r.turns.length - 1]?.role === "user") return;
+  if (r.turns.filter((t) => t.role === "user").length >= MAX_USER_TURNS) return;
+  update(s.id, (x) => { const rounds = [...x.rounds]; rounds[rounds.length - 1] = { ...r, turns: [...r.turns, { role: "user", content: text }] }; return { ...x, rounds, chatDraft: "" }; });
+}
+
+// ---------------- Executive-Vorbereitung ("Grill me") – komplett offline, ohne KI ----------------
+// Ablauf: Fundament-Fragen (der Coach hakt bei dünnen Antworten nach) → Stresstest mit Gegenreaktionen → Gesprächs-Dossier.
+// Bewertet werden nur beobachtbare Merkmale der eigenen Texte; es wird nichts erfunden und nichts über das Gegenüber behauptet.
+const P_DIMS = {
+  ziel: "Ziel & Botschaft", fakten: "Fakten & Begründung", gegenueber: "Gegenüber verstehen", rahmen: "Rahmen & Ablauf",
+  grenzen: "Grenzen & Spielraum", risiko: "Risiko & Eskalation", kommunikation: "Kommunikation & Stakeholder", danach: "Nachbereitung", stress: "Reaktionen unter Druck", organisation: "Organisation & Außenwirkung",
+};
+const P_HEDGE = /\b(eigentlich|vielleicht|irgendwie|halt|quasi|sozusagen|leider|ein bisschen|eventuell|wollte nur|ich glaube|ich hoffe|könnte man|müsste man|versuche ich|probiere ich)\b/gi;
+const P_MIND = /\b(bestimmt|sicherlich|wahrscheinlich)\s+(will|denkt|ist|findet|hat)\b|\b(er|sie)\s+(will|denkt|glaubt)\s+(nur|sowieso|eh)\b|\bdenen geht es nur\b|\b(er|sie)\s+fühlt sich\b/i;
+const P_CONCRETE = /\d|montag|dienstag|mittwoch|donnerstag|freitag|januar|februar|märz|april|mai\b|juni|juli|august|september|oktober|november|dezember|„[^“]+“|"[^"]+"/i;
+const pWords = (t) => (String(t || "").trim().match(/\S+/g) || []).length;
+const pHedges = (t) => String(t || "").match(P_HEDGE) || [];
+
+const P_COMMON = (v) => [
+  { id: "ziel1", d: "ziel", k: "decision", q: `Sag die Kernbotschaft in genau einem Satz, so wie du sie ${v.d} wörtlich sagen würdest. Kein „eigentlich“, kein „leider“, keine Einleitung.`, why: "Wer die Botschaft nicht in einem Satz sagen kann, wird sie im Gespräch zerreden.", probe: "Das ist noch kein Satz, den man morgen sagen kann. Wie lautet die Botschaft wörtlich, ohne Absicherung?" },
+  { id: "ziel2", d: "ziel", k: "outcome", q: "Woran erkennst du 24 Stunden nach dem Gespräch, dass es gelungen ist? Nenne zwei beobachtbare Ergebnisse.", why: "Ohne Messlatte ist jedes Gespräch ein Erfolg oder ein Scheitern, je nach Stimmung.", probe: "‚Gutes Gefühl‘ zählt nicht. Welche zwei Dinge könnte jemand von außen feststellen?" },
+  { id: "fakt1", d: "fakten", k: "facts", q: "Welche drei Fakten, Beschlüsse oder Daten tragen die Entscheidung? Welche davon würdest du bewusst nicht nennen, und warum?", why: "Ein Gegenüber greift immer die schwächste Begründung an.", probe: "Nenne konkret: Zahl, Datum, Beschluss oder Name. Welche Begründung ist die schwächste?" },
+  { id: "fakt2", d: "fakten", k: "gap", q: "Was wirst du nicht beantworten können, obwohl es gefragt wird (Zahlen, Termine, Zuständigkeiten)? Wie lautet deine ehrliche Antwort darauf?", why: "Die Lücke, die du nicht benennst, füllt dein Gegenüber mit Misstrauen.", probe: "Formuliere den Satz: ‚Das weiß ich heute nicht, ich melde mich bis …‘ konkret für deinen Fall." },
+  { id: "geg1", d: "gegenueber", k: "observe", q: `Was ist ${v.d} wichtig: Status, Sicherheit, Beziehung, Ergebnis? Woran hast du das selbst beobachtet (Situation, nicht Vermutung)?`, why: "Vermutungen über Motive führen zu Sätzen, die das Gegenüber zurückweist.", probe: "Beschreibe eine konkrete Situation, in der du es gesehen hast: wann, wo, was wurde gesagt oder getan?" },
+  { id: "geg2", d: "gegenueber", k: "observe", q: `Wie hat ${v.n} bisher auf schlechte Nachrichten reagiert? Beschreibe das letzte konkrete Mal.`, why: "Das letzte reale Verhalten ist die beste Prognose, besser als jede Annahme.", probe: "Ein konkretes Beispiel bitte: Wann war das, was wurde gesagt, wie lief es weiter? Wenn es keins gibt: sag das offen." },
+  { id: "rahmen1", d: "rahmen", k: "setting", q: "Wann, wo, wie lange, wer ist dabei und was ist der erste Satz nach der Begrüßung? Begründe die Wahl.", why: "Rahmen ist die erste Aussage. Ein Zwischen-Tür-und-Angel-Termin sagt: ‚nicht wichtig‘.", probe: "Ich brauche Ort, Zeitpunkt, Dauer und Teilnehmende, und einen Grund, warum genau so." },
+  { id: "risiko1", d: "risiko", k: "risk", q: "Was ist das schlimmste realistische Ergebnis, wie wahrscheinlich ist es, und was tust du in den ersten zehn Minuten, wenn es eintritt?", why: "Wer den Worst Case nicht durchgespielt hat, improvisiert genau dann, wenn er es am schlechtesten kann.", probe: "‚Wird schon gehen‘ ist keine Antwort. Was sagst oder tust du in den ersten zehn Minuten konkret?" },
+  { id: "grenz1", d: "grenzen", k: "bounds", q: "Was ist nicht verhandelbar, was ist verhandelbar? Nenne mindestens je zwei Punkte.", why: "Wer keine Linie hat, verhandelt sie im Gespräch unter Druck neu.", probe: "Trenne es scharf: Zwei Punkte, die nicht verhandelbar sind, und zwei, bei denen du Spielraum hast." },
+  { id: "emo1", d: "grenzen", k: "trigger", q: "Welche Reaktion würde dich am meisten aus dem Konzept bringen? Was ist dann dein erster Satz?", why: "Der eigene Trigger ist der Hebel, den das Gegenüber (unabsichtlich) am leichtesten findet.", probe: "Nenne die Reaktion wörtlich und schreibe den ersten Satz, den du dann sagst." },
+  { id: "komm1", d: "kommunikation", k: "comms", q: "Wer erfährt wann was, vor und nach dem Gespräch (Team, HR, Kunden, Gremien, Öffentlichkeit)? Was passiert, wenn es vorher durchsickert?", why: "Die meisten Eskalationen entstehen nicht im Gespräch, sondern in der Reihenfolge der Informationen.", probe: "Bring es in eine Reihenfolge mit Namen oder Rollen und Zeitpunkten. Und wer informiert wen, wenn es vorher durchsickert?" },
+  { id: "danach1", d: "danach", k: "plan", q: "Was muss in den ersten sieben Tagen nach dem Gespräch passieren, und wer ist wofür verantwortlich?", why: "Ohne klare nächste Schritte bleibt das Gespräch ein Ereignis statt ein Übergang.", probe: "Nenne Aufgaben mit Verantwortlichen und Terminen, nicht nur Absichten." },
+  { id: "org1", d: "organisation", k: "free", q: "Warum jetzt, und wie passt diese Entscheidung zur Strategie? Welche Fähigkeit fehlt der Organisation danach, und wie baust du sie auf?", why: "Eine Trennung ohne strategischen Grund wirkt wie Willkür, mit Grund wie Führung.", probe: "Nenne den strategischen Grund in einem Satz und die Fähigkeit, die dadurch fehlt oder entsteht." },
+  { id: "org2", d: "organisation", k: "free", q: "Wie wird sich dieser Abgang bei Kunden, Investoren und im Markt erzählen? Welche Version soll weitererzählt werden, und was tust du dafür?", why: "Von außen betrachtet zählt nicht dein Motiv, sondern die Geschichte, die ankommt.", probe: "Schreibe die Version, die du dir wünschst, in zwei Sätzen und nenne, wer sie wann erzählt." },
+  { id: "org3", d: "organisation", k: "free", q: "Welches Signal sendet diese Entscheidung den Verbleibenden über eure Werte? Wo widerspricht sie dem, was die Organisation nach außen sagt?", why: "Die Verbleibenden lesen jede Trennung als Auskunft darüber, was hier wirklich gilt.", probe: "Nenne einen konkreten Wert, den ihr betont, und ob die Entscheidung ihn stützt oder verletzt." },
+];
+
+const P_SCEN = {
+  "kuendigung-eigene": {
+    label: "Eigene Kündigung", sub: "Gegenüber Vorgesetzten, Gremium oder Gesellschaftern", n: "deine Führungskraft", d: "deiner Führungskraft", map: "eigene-kuendigung",
+    extra: [
+      { id: "x1", d: "grenzen", k: "bounds", q: "Wie reagierst du auf ein Gegenangebot? Ab welchem konkreten Punkt würdest du bleiben, und wenn nie: wie sagst du es in einem Satz?", why: "Ein offenes ‚Mal sehen‘ wird als Verhandlungsbeginn gehört.", probe: "Entscheide dich: Gibt es einen Punkt, an dem du bleibst? Nenne ihn oder sage klar, dass es keinen gibt." },
+      { id: "x2", d: "danach", k: "plan", q: "Welche Übergabe bietest du an, mit Zeitrahmen? Was liegt ausdrücklich nicht mehr in deiner Verantwortung?", why: "Eine großzügige, aber unbegrenzte Übergabe wird zur Dauerverpflichtung.", probe: "Nenne Inhalte, Zeitrahmen und eine Grenze, zum Beispiel ‚bis zum …, nicht danach‘." },
+      { id: "x3", d: "fakten", k: "gap", q: "Welche Fragen zu neuem Arbeitgeber, Kunden oder Know-how beantwortest du, und welche nicht? Wie lehnst du freundlich ab?", why: "Hier gehen Vertrauen und Vertragsklauseln am schnellsten verloren. Rechtliches klärst du vorab verbindlich.", probe: "Schreibe eine konkrete Antwort für die unangenehmste Frage dazu." },
+    ],
+    react: ["gegenangebot", "loyalitaet", "bagatell", "unersetzlich", "verhandeln", "team"],
+    check: ["Vertragliche Fristen und Klauseln selbst geprüft oder verbindlich klären lassen", "Kommunikation an Team und Kunden mit der Führungskraft abgestimmt (Zeitpunkt, Wortlaut)", "Übergabeplan als Blatt dabei"],
+  },
+  "trennung-fuehrung": {
+    label: "Trennung von Führungskraft", sub: "Direct Report, Bereichsleitung oder Executive-Team", n: "die Führungskraft", d: "der Führungskraft", map: "trennung-mitarbeitende",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Welche früheren Gespräche, Zielvereinbarungen und Rückmeldungen gibt es nachweisbar? Was fehlt dir an Belegen?", why: "Bei Führungskräften wird Fairness an der Vorgeschichte gemessen.", probe: "Nenne Daten und Inhalte der früheren Gespräche. Wenn es sie nicht gibt: sag das, es ist eine Lücke, die du kennen musst." },
+      { id: "x2", d: "kommunikation", k: "comms", q: "Wie wirkt der Abgang auf Team und Schlüsselpersonen? Wer wird sich fragen ‚bin ich der Nächste‘, und was sagst du dieser Person?", why: "Die Trennung wird von den Verbleibenden als Signal über die Kultur gelesen.", probe: "Nenne mindestens eine konkrete Person oder Gruppe und die Botschaft an sie." },
+      { id: "x3", d: "danach", k: "plan", q: "Wie ist die Nachfolge oder Interimslösung geregelt, und was sagst du, wenn danach gefragt wird?", why: "Ohne Nachfolgeklärung wirkt die Trennung wie ein Vakuum.", probe: "Wer übernimmt ab wann? Wenn offen: wie lautet dein ehrlicher Satz dazu?" },
+    ],
+    react: ["schock", "warum", "fairness", "anwalt", "leak", "team"],
+    check: ["HR und Rechtsabteilung vorab eingebunden", "Zugänge, Geräte, Vertretung und Kundenkommunikation vorbereitet", "Wortlaut der internen Mitteilung abgestimmt"],
+  },
+  "trennung-mitarbeitende": {
+    label: "Trennung von Mitarbeitenden", sub: "Leistung, Vertrauensbruch oder Vertragsende", n: "die Person", d: "der Person", map: "trennung-mitarbeitende",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Welche konkreten, beobachtbaren Leistungs- oder Verhaltensbelege hast du (Datum, Situation, Auswirkung)? Was wurde der Person vorher klar gesagt?", why: "‚Es passt nicht mehr‘ ist keine Begründung, auf die man sich verlassen kann.", probe: "Drei konkrete Vorfälle oder Ergebnisse mit Datum. Und wann wurde es angesprochen?" },
+      { id: "x2", d: "risiko", k: "risk", q: "Was ist der stärkste Fairness-Einwand, den die Person bringen kann, und wie gehst du darauf ein?", why: "Der Fairness-Vorwurf ist der häufigste und wirksamste.", probe: "Nenne den Einwand wörtlich und deine Antwort darauf in zwei Sätzen." },
+      { id: "x3", d: "rahmen", k: "setting", q: "Wer ist von HR oder Betriebsrat eingebunden, und wie sorgst du dafür, dass die Person würdevoll und ohne Publikum aus dem Gespräch geht?", why: "Die Art des Abgangs prägt auch die Verbleibenden.", probe: "Nenne konkrete Schritte für Ort, Zeitpunkt und den Weg nach dem Gespräch." },
+    ],
+    react: ["schock", "warum", "verhandeln", "fairness", "trauer", "anwalt"],
+    check: ["HR und gegebenenfalls Betriebsrat vorab eingebunden", "Unterlagen und Belege griffbereit, aber nicht als Waffe", "Unterstützungsangebote (Zeugnis, Übergabe, Beratung) vorab geklärt"],
+  },
+  restrukturierung: {
+    label: "Restrukturierung & Stellenabbau", sub: "Botschaft an Team, Bereich oder Belegschaft", n: "das Team", d: "dem Team", map: "trennung-mitarbeitende",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Welche Kriterien entscheiden, wen es trifft? Kannst du sie in zwei Sätzen erklären, ohne jemanden namentlich zu bewerten?", why: "Unerklärliche Auswahl erzeugt den Eindruck von Willkür.", probe: "Nenne die Kriterien konkret, in zwei Sätzen, ohne Personen zu nennen." },
+      { id: "x2", d: "kommunikation", k: "comms", q: "Was sagst du denen, die bleiben? Was brauchen sie, um in den nächsten vier Wochen arbeitsfähig zu bleiben?", why: "Die Verbleibenden entscheiden über Leistung und Kündigungen nach der Maßnahme.", probe: "Nenne drei konkrete Dinge: Information, Entlastung, Perspektive." },
+      { id: "x3", d: "risiko", k: "risk", q: "Welche Gerüchte entstehen in den ersten 48 Stunden, und wie nimmst du ihnen den Raum?", why: "Schweigen wird mit dem schlimmsten Szenario gefüllt.", probe: "Nenne zwei konkrete Gerüchte und wie du sie mit welcher Information schließt." },
+    ],
+    react: ["wut", "fairness", "warum", "team", "trauer", "aufnahme"],
+    check: ["Mitbestimmungs- und Informationspflichten verbindlich geklärt (HR/Recht)", "Einzelgespräche vor der Gesamtinformation terminiert", "FAQ-Blatt mit Antworten und offenen Punkten bereit"],
+  },
+  "aufhebung-verhandeln": {
+    label: "Aufhebung & Abfindung verhandeln", sub: "Trennungspaket, Freistellung, Zeugnis, Außendarstellung", n: "die Gegenseite", d: "der Gegenseite", map: "trennung-mitarbeitende",
+    extra: [
+      { id: "x1", d: "grenzen", k: "bounds", q: "Was ist deine beste Alternative, wenn es keine Einigung gibt? Wie stark ist sie wirklich, und was weiß die Gegenseite davon?", why: "Verhandlungsmacht kommt aus der Alternative, nicht aus dem Auftreten.", probe: "Beschreibe die Alternative konkret und bewerte ehrlich ihre Stärke." },
+      { id: "x2", d: "fakten", k: "facts", q: "Aus welchen Bestandteilen besteht dein Paket (Geld, Zeit, Zeugnis, Freistellung, Kommunikation)? Was ist dein Anker, was dein Mindestziel?", why: "Wer ohne Anker beginnt, verhandelt gegen sich selbst.", probe: "Nenne Zahlen oder Zeiträume für Anker und Mindestziel. Die rechtliche Prüfung bleibt bei Fachleuten." },
+      { id: "x3", d: "kommunikation", k: "comms", q: "Wie lautet die vereinbarte Außendarstellung, und wer sagt sie wem wann? Was tust du bei Abweichung?", why: "Die Formulierung nach außen ist oft wertvoller als die letzte Verhandlungsrunde.", probe: "Schreibe den Standardsatz und nenne, wer ihn nutzt." },
+    ],
+    react: ["verhandeln", "anwalt", "fairness", "aufnahme", "leak", "bagatell"],
+    check: ["Vertragliche und steuerliche Fragen von Fachleuten geprüft", "Verhandlungsspielräume vorab schriftlich festgelegt", "Ergebnis wird im Anschluss schriftlich zusammengefasst"],
+  },
+  "ausstieg-kunde": {
+    label: "Ausstieg aus Kunden- oder Partnerschaft", sub: "Kunde, Lieferant, Agentur oder strategischer Partner", n: "die Partnerseite", d: "der Partnerseite", map: "ausstieg-zusammenarbeit",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Wie groß ist die Abhängigkeit auf beiden Seiten (Umsatzanteil, Know-how, Verträge, Laufzeiten)? Was verlierst du, was verliert die Gegenseite?", why: "Wer die Abhängigkeit nicht kennt, überschätzt oder unterschätzt seine Position.", probe: "Nenne Zahlen oder Größenordnungen für beide Seiten." },
+      { id: "x2", d: "danach", k: "plan", q: "Welche Übergangsleistungen bietest du an, bis wann, und wo endet deine Haftung?", why: "Ein sauberer Übergang schützt die Reputation, die du sonst durch den Ausstieg riskierst.", probe: "Nenne Leistungen, Enddatum und die Grenze deiner Verantwortung." },
+      { id: "x3", d: "kommunikation", k: "comms", q: "Was erzählt die Gegenseite in ihrem Netzwerk über den Ausstieg? Wie sorgst du dafür, dass sie eine faire Version erzählen kann?", why: "In Märkten mit wenigen Akteuren spricht sich alles herum.", probe: "Formuliere den Satz, den die Gegenseite weitererzählen könnte." },
+    ],
+    react: ["wut", "verhandeln", "schuld", "unersetzlich", "leak", "loyalitaet"],
+    check: ["Kündigungsfristen und Vertragsklauseln verbindlich geprüft", "Übergangsplan schriftlich vorbereitet", "Interne Information an Account- und Projektteams terminiert"],
+  },
+  gesellschafter: {
+    label: "Trennung unter Gesellschaftern", sub: "Co-Founder, Mitgesellschafter oder Geschäftsleitung", n: "dein Gegenüber", d: "deinem Gegenüber", map: "ausstieg-zusammenarbeit",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Welche Regelungen (Gesellschaftervertrag, Anteile, Bewertung, Wettbewerbsverbot) betreffen die Trennung? Was ist geklärt, was ungeklärt?", why: "Die emotionale Trennung gelingt nur, wenn die formale Seite nicht offen im Raum steht. Das prüfen Fachleute verbindlich.", probe: "Trenne sauber: geklärt / ungeklärt / von Fachleuten zu prüfen." },
+      { id: "x2", d: "kommunikation", k: "comms", q: "Wie erfahren Investoren, Team und Kunden davon, und welche Version erzählen beide Seiten?", why: "Zwei Versionen derselben Trennung zerstören mehr Wert als die Trennung selbst.", probe: "Schreibe die gemeinsame Kurzversion in zwei Sätzen." },
+      { id: "x3", d: "gegenueber", k: "observe", q: "Welchen Anteil an der Geschichte hast du selbst, den dein Gegenüber ansprechen wird? Was räumst du ein?", why: "Wer Eigenanteil benennt, entzieht dem Vorwurf die Wucht.", probe: "Nenne konkret, was du einräumst, in einem ehrlichen Satz." },
+    ],
+    react: ["wut", "schuld", "anwalt", "leak", "loyalitaet", "verhandeln"],
+    check: ["Vertragliche Lage von Fachleuten geprüft", "Gemeinsame Außenbotschaft abgestimmt", "Zugänge, Vollmachten und Kundenkontakte geklärt"],
+  },
+  ultimatum: {
+    label: "Letztes Klärungsgespräch vor Trennung", sub: "Ultimatum, Abmahnung oder letzte Chance", n: "die Person", d: "der Person", map: "trennung-mitarbeitende",
+    extra: [
+      { id: "x1", d: "fakten", k: "facts", q: "Welches konkrete Verhalten muss sich bis wann ändern, woran messen wir es, und was folgt, wenn nicht?", why: "Ein Ultimatum ohne Messlatte ist nur eine Drohung.", probe: "Verhalten, Frist, Messkriterium und Konsequenz, jeweils konkret." },
+      { id: "x2", d: "ziel", k: "outcome", q: "Willst du wirklich, dass es besser wird? Wenn du es ehrlich nicht glaubst: Was heißt das für das Gespräch?", why: "Wer innerlich schon entschieden hat, spielt sonst ein Gespräch, das keiner ernst nimmt.", probe: "Beantworte die Frage ehrlich in ein bis zwei Sätzen." },
+      { id: "x3", d: "danach", k: "plan", q: "Wie sieht Unterstützung aus, die du wirklich geben kannst (Zeit, Coaching, Ziele)? Wann ist das Nachgespräch?", why: "Unterstützung, die nicht zugesagt wird, macht das Ultimatum unfair.", probe: "Nenne konkrete Unterstützung und einen Termin für das Nachgespräch." },
+    ],
+    react: ["schock", "fairness", "schuld", "wut", "trauer", "verhandeln"],
+    check: ["Dokumentation der bisherigen Gespräche und Vereinbarungen zur Hand", "HR vorab informiert", "Folgetermin im Kalender"],
+  },
+};
+
+const P_GROUPS = [["Eigener Abgang", ["kuendigung-eigene"]], ["Trennung und Veränderung", ["trennung-fuehrung", "trennung-mitarbeitende", "restrukturierung", "ultimatum"]], ["Verhandlung und Partner", ["aufhebung-verhandeln", "ausstieg-kunde", "gesellschafter"]]];
+const P_CARDS = {
+  schock: { name: "Schock und Schweigen", line: "„Das habe ich überhaupt nicht kommen sehen.“ (danach Stille)", trap: "Die Stille mit Rechtfertigung füllen.", need: ["emp", "nxt"], dont: "Nicht in die Stille hinein begründen oder abschwächen.", model: "Ich verstehe, dass das ein Schlag ist. Ich lasse dir einen Moment. Wenn du so weit bist, sage ich dir, wie es jetzt weitergeht." },
+  warum: { name: "„Warum ich?“", line: "„Warum ausgerechnet ich? Was habe ich falsch gemacht?“", trap: "Neue Nebenargumente liefern, die angreifbar sind.", need: ["bnd", "emp"], dont: "Keine Charakterbewertungen, keine neuen Gründe nachschieben.", model: "Die Entscheidung beruht auf [deinem Kriterium]. Das ist keine Bewertung deiner Person. Ich erkläre dir die Kriterien gern genauer. Die Entscheidung selbst steht." },
+  verhandeln: { name: "Verhandeln", line: "„Gib mir noch drei Monate, dann zeige ich dir, was ich kann.“", trap: "Aus Mitgefühl einen Spielraum eröffnen, den es nicht gibt.", need: ["bnd", "nxt"], dont: "Nicht ‚mal sehen‘ sagen, wenn die Entscheidung steht.", model: "Ich höre, dass dir das wichtig ist. Die Entscheidung bleibt. Verhandelbar ist, wie wir die Zeit bis [Datum] gestalten und wie die Übergabe läuft." },
+  fairness: { name: "Fairness-Vorwurf", line: "„Anderen passiert das nicht. Das ist ungerecht.“", trap: "Andere Fälle verteidigen oder vergleichen.", need: ["bnd"], dont: "Keine Aussagen über andere Personen.", model: "Ich nehme den Vorwurf ernst. Die Kriterien waren [Kriterium], und ich kann sie dir nennen. Andere Fälle bespreche ich nicht. An der Entscheidung ändert das nichts." },
+  anwalt: { name: "Rechtliche Drohung", line: "„Dann schalte ich meinen Anwalt ein.“", trap: "Rechtliche Einschätzungen abgeben oder zurückdrohen.", need: ["bnd", "nxt"], dont: "Keine eigene Rechtsbewertung, keine Gegendrohung.", model: "Das steht dir frei. Ich schlage vor, dass die Details über [HR / Rechtsabteilung] weiterlaufen. Ich möchte heute trotzdem klären, was du für die nächsten Tage brauchst." },
+  wut: { name: "Wut und Vorwurf", line: "„Das ist eine Frechheit nach allem, was ich hier geleistet habe!“", trap: "Zurückschreien oder die Leistung kleinreden.", need: ["emp", "bnd"], dont: "Die Leistung nie in Frage stellen, um die Entscheidung zu stützen.", model: "Ich höre, wie heftig das bei dir ankommt, und ich stelle deine Leistung nicht in Frage. Die Entscheidung bleibt trotzdem. Wir können kurz pausieren, wenn du das möchtest." },
+  trauer: { name: "Tränen und Rückzug", line: "(Die Person weint oder schweigt und schaut weg.)", trap: "Hektisch trösten oder das Gespräch abbrechen.", need: ["emp", "nxt"], dont: "Nicht umarmen, nicht beschwichtigen, nicht fluchtartig beenden.", model: "Nimm dir die Zeit, die du brauchst. Wir können pausieren oder das Gespräch heute kurz halten und morgen um [Uhrzeit] die nächsten Schritte klären." },
+  loyalitaet: { name: "Appell an die Loyalität", line: "„Ich habe dir vertraut. Das hätte ich von dir nicht erwartet.“", trap: "Schuld übernehmen, um die Beziehung zu retten.", need: ["emp", "bnd"], dont: "Nicht entschuldigen für die Entscheidung selbst.", model: "Das Vertrauen zwischen uns war mir wichtig, und ich sehe, dass dich das trifft. Meine Entscheidung ändert das nicht, aber ich möchte, dass wir fair auseinandergehen." },
+  gegenangebot: { name: "Gegenangebot", line: "„Was müssten wir dir bieten, damit du bleibst?“", trap: "Aus Höflichkeit ‚Ich überlege es mir‘ sagen.", need: ["bnd", "nxt"], dont: "Kein ‚vielleicht‘, wenn die Antwort Nein ist.", model: "Danke, das ist ein Zeichen von Wertschätzung. Meine Entscheidung steht, und ein Angebot ändert sie nicht. Lass uns klären, wie wir die Übergabe bis [Datum] gut hinbekommen." },
+  schuld: { name: "Schuldzuweisung", line: "„Das liegt auch an dir und an deiner Führung.“", trap: "Sich verteidigen und das Thema wechseln.", need: ["bnd"], dont: "Nicht kontern, nicht aufrechnen.", model: "Ich nehme mit, was du zu meiner Rolle sagst, und bin für ein eigenes Gespräch darüber bereit. Heute geht es um die Entscheidung und deine nächsten Schritte." },
+  aufnahme: { name: "Mitschnitt und Schriftform", line: "„Ich schneide das mit.“ / „Das möchte ich schriftlich.“", trap: "Aus dem Affekt zu- oder abzusagen.", need: ["bnd", "nxt"], dont: "Keine rechtlichen Behauptungen zur Zulässigkeit von Aufnahmen.", model: "Einem Mitschnitt stimme ich nicht zu. Ich fasse das Ergebnis heute noch schriftlich zusammen, dann hast du alles Verbindliche in der Hand." },
+  team: { name: "Frage nach der Kommunikation", line: "„Und was sage ich jetzt meinem Team / meinen Kunden?“", trap: "Spontan Zusagen zum Wortlaut oder Zeitpunkt machen.", need: ["nxt", "bnd"], dont: "Nichts zur Kommunikation zusagen, was nicht abgestimmt ist.", model: "Gute Frage. Ich schlage vor, wir stimmen die Botschaft gemeinsam ab, damit sie für alle gleich ist. Bis [Termin] bleibt die Information bei uns." },
+  unersetzlich: { name: "„Das schafft keiner ohne mich“", line: "„Das schafft hier keiner ohne mich.“", trap: "Die Bedeutung kleinreden oder sich schuldig fühlen.", need: ["emp", "nxt"], dont: "Nicht bestreiten, was stimmt.", model: "Ich sehe, wie viel Wissen bei dir liegt. Genau deshalb möchte ich mit dir planen, was bis [Datum] dokumentiert und übergeben wird." },
+  leak: { name: "Drohung mit Öffentlichkeit", line: "„Dann gehe ich damit an die Belegschaft / an die Investoren.“", trap: "Mit Gegendruck reagieren oder beschwichtigen.", need: ["bnd"], dont: "Keine Gegendrohung, keine Zusagen unter Druck.", model: "Ich bitte dich, vertraulich zu bleiben. Ich möchte heute klären, was du brauchst. Unter Druck ändere ich die Entscheidung nicht." },
+  bagatell: { name: "Bagatellisieren", line: "„Das klären wir kurz bei einem Kaffee. So schlimm ist es doch nicht.“", trap: "Mitspielen, weil es angenehmer ist.", need: ["bnd", "nxt"], dont: "Das Gewicht nicht herunterspielen lassen.", model: "Für mich ist es ernst, deshalb besprechen wir es heute ausführlich. Die Entscheidung steht, und ich nehme mir die Zeit, die wir brauchen." },
+};
+
+const P_PHRASES = [
+  ["Pause einlegen", "Ich merke, dass wir beide angespannt sind. Ich schlage zehn Minuten Pause vor und dann machen wir weiter."],
+  ["Auf den Punkt zurück", "Ich verstehe, dass das viele Fragen aufwirft. Ich komme zu dem zurück, was heute geklärt sein muss."],
+  ["Nicht wissen eingestehen", "Das weiß ich heute nicht. Ich melde mich bis [Datum] dazu."],
+  ["Grenze halten", "Dazu kann ich heute nichts anderes sagen. Die Entscheidung steht."],
+  ["Gespräch beenden", "Ich merke, dass wir heute nicht weiterkommen. Ich fasse zusammen, was gilt, und wir sprechen am [Tag] weiter."],
+  ["Zusammenfassen", "Damit wir dasselbe verstanden haben: …"],
+];
+
+const P_CHECK = [
+  "Kernbotschaft liegt als ein Satz schriftlich vor",
+  "Zwei Ergebnisse für „gelungen“ sind festgelegt",
+  "Zeitpunkt, Ort und Teilnehmende sind bestätigt, kein Termin zwischen Tür und Angel",
+  "Zahlen und Fakten sind griffbereit, ungeklärte Fragen sind benannt",
+  "Nicht verhandelbare und verhandelbare Punkte sind aufgeschrieben",
+  "Wortlaut für den schlimmsten Fall ist geübt",
+  "Reihenfolge der Information (wer erfährt wann was) ist festgelegt",
+  "Nachgespräch oder nächster Termin ist im Kalender",
+  "Rechtliche Fragen sind bei Fachleuten geklärt, nicht im Gespräch",
+  "Strategischer Grund und Außenerzählung sind in je einem Satz formuliert",
+  "Ich habe das Gespräch mindestens einmal laut durchgesprochen",
+];
+
+// ---- Zustand ----
+const KEY_P = "exitcoach.prep.v1";
+let memPrep = [];
+try { memPrep = JSON.parse(localStorage.getItem(KEY_P) || "[]"); } catch { memPrep = []; }
+function pSave() { try { localStorage.setItem(KEY_P, JSON.stringify(memPrep)); } catch {} }
+const pGet = (id) => memPrep.find((x) => x.id === id);
+function pUpdate(id, fn, rerender = true) {
+  const i = memPrep.findIndex((x) => x.id === id); if (i < 0) return;
+  memPrep[i] = { ...fn(memPrep[i]), updatedAt: new Date().toISOString() }; pSave();
+  if (rerender) render();
+}
+const pQuestions = (sc) => { const S = P_SCEN[sc]; const v = { n: S.n, d: S.d }; const c = P_COMMON(v); c.splice(8, 0, ...S.extra); return c; };
+const pSteps = (s) => ["ctx", ...pQuestions(s.sc).map((q) => q.id), ...P_SCEN[s.sc].react.map((r) => "r:" + r)];
+
+// ---- Bewertung (nur beobachtbare Merkmale der eigenen Texte) ----
+function pQuestionScore(q, t) {
+  const w = pWords(t); if (!w) return 0;
+  let sc = 100; const hed = pHedges(t).length;
+  if (w < 8) sc -= 40; else if (w < 15) sc -= 12;
+  const toks = String(t).toLowerCase().match(/[a-zäöüß]+/g) || []; if (toks.length > 10 && new Set(toks).size / toks.length < 0.5) sc -= 25;
+  sc -= Math.min(30, hed * 10);
+  if (["facts", "plan", "outcome", "comms", "setting", "risk"].includes(q.k) && !P_CONCRETE.test(t)) sc -= 18;
+  if (q.k === "observe" && P_MIND.test(t)) sc -= 18;
+  if (q.k === "bounds" && !(/nicht|kein|ausgeschlossen/i.test(t) && /offen|bereit|flexibel|verhandelbar|spielraum|kann ich/i.test(t))) sc -= 22;
+  if (q.k === "decision" && w > 45) sc -= 20;
+  return Math.max(5, Math.min(100, sc));
+}
+function pProbe(q, t, v) {
+  const w = pWords(t), hed = pHedges(t);
+  if (w < 8) return { head: "Zu dünn.", text: q.probe };
+  if (hed.length >= 2) return { head: "Du sicherst dich ab.", text: `Du schreibst „${hed[0]}“ und „${hed[1]}“. Formuliere dieselbe Aussage noch einmal ohne Absicherungswörter.` };
+  if (q.k === "observe" && P_MIND.test(t)) return { head: "Das ist eine Vermutung.", text: `Du beschreibst, was ${v.n} will oder denkt. Woran hast du es konkret beobachtet, mit Situation und Wortlaut?` };
+  if (["facts", "plan", "outcome", "comms", "setting", "risk"].includes(q.k) && !P_CONCRETE.test(t)) return { head: "Zu allgemein.", text: q.probe };
+  if (q.k === "bounds" && pQuestionScore(q, t) < 80) return { head: "Die Linie ist unscharf.", text: q.probe };
+  if (q.k === "decision" && w > 45) return { head: "Das ist kein Satz.", text: "Das sind mehrere Sätze. Kürze auf einen einzigen, den man sich merken kann." };
+  return null;
+}
+const P_EMP = /\b(verstehe|nachvollziehbar|nehme (das )?wahr|sehe,? dass|höre,? dass|das trifft|das ist (für dich )?(hart|schwer|viel)|ich merke|ich weiß,? (dass|wie))\b/i;
+const P_BND = /\b(bleibt|steht fest|steht|ist entschieden|nicht verhandelbar|ändert (sich |daran |das )?nichts|kann ich nicht|werde ich nicht|ist final|endgültig|stimme ich nicht zu)\b/i;
+const P_NXT = /\b(als nächstes|nächste[rn]? schritt|schlage ich vor|vereinbaren|termin|bis (zum |morgen|montag|dienstag|mittwoch|donnerstag|freitag|\[)|heute noch|morgen|\d{1,2}\.\s?\d{1,2}|uhr|schriftlich)\b/i;
+const P_BLAME = /\bdu bist (jetzt |sicher |bestimmt |einfach )?(wütend|sauer|enttäuscht|verletzt|traurig|geschockt|beleidigt)\b|\bdu (fühlst dich|willst nur|denkst nur)\b|\bdu hast (immer|nie)\b/i;
+const P_PROMISE = /\b(ich verspreche|garantiere|auf jeden fall|niemals|nie wieder|ganz sicher)\b/i;
+function pReplyScore(t, c) {
+  const w = pWords(t); if (!w) return { score: 0, strength: "", improve: "Keine Antwort abgegeben. Schreib auch unfertig auf, was du sagen würdest, denn das Gespräch lässt dir diese Wahl nicht.", alt: c.model };
+  let sc = 100; const good = [], bad = [];
+  const hed = pHedges(t);
+  const norm = (x) => new Set(String(x).toLowerCase().replace(/\[[^\]]*\]/g, " ").match(/[a-zäöüß]{4,}/g) || []);
+  const A1 = norm(t), B1 = norm(c.model); let inter = 0; A1.forEach((x) => B1.has(x) && inter++);
+  const copied = A1.size >= 6 && inter / (A1.size + B1.size - inter) > 0.6;
+  if (copied) { sc = Math.min(sc, 60); bad.unshift("Das ist fast die Musterformulierung. Sag es in deinen eigenen Worten, denn nur das trägt im Gespräch."); }
+  if (w < 6) { sc -= 40; bad.push(`Die Antwort hat nur ${w} ${w === 1 ? "Wort" : "Wörter"}. Unter Druck brauchst du mindestens einen vollständigen Gedanken.`); }
+  else if (w > 80) { sc -= 15; bad.push(`Die Antwort hat ${w} Wörter. Unter Druck kommen Sätze mit unter 25 Wörtern an.`); }
+  const lenOk = w >= 6 && w <= 80;
+  if (hed.length) { sc -= Math.min(25, hed.length * 10); bad.push(`Du schreibst „${hed[0]}“. Solche Wörter schwächen eine klare Position.`); }
+  const lead = t.trim().match(/^(ja,? aber|nein,? aber|das stimmt nicht|das ist nicht wahr)/i);
+  if (lead) { sc -= 10; bad.push(`Der Satz beginnt mit „${lead[0]}“ und löst Abwehr aus.`); }
+  if ((t.match(/\b(weil|denn|aber|jedoch)\b/gi) || []).length >= 4) { sc -= 10; bad.push("Viele Begründungen hintereinander wirken wie Rechtfertigung."); }
+  const bl = t.match(P_BLAME); if (bl) { sc -= 15; bad.push(`„${bl[0]}“ stellt Gefühl oder Absicht des Gegenübers als Tatsache hin. Formuliere es als Beobachtung („Ich sehe …“) oder als Frage.`); }
+  const pr = t.match(P_PROMISE); if (pr) { sc -= 10; bad.push(`„${pr[0]}“ ist eine Zusage, die du unter Druck vielleicht nicht halten kannst.`); }
+  for (const n of c.need) {
+    if (n === "emp") { const m = t.match(P_EMP); if (m) good.push(`„${m[0]}“ zeigt, dass du zuhörst, ohne die Entscheidung zu ändern.`); else { sc -= 15; bad.push("Es fehlt ein Zuhör-Signal, zum Beispiel „Ich verstehe, dass …“ oder „Ich höre, dass …“."); } }
+    if (n === "bnd") { const m = t.match(P_BND); if (m) good.push(`„${m[0]}“ macht die Grenze hörbar.`); else { sc -= 18; bad.push("Die Grenze ist nicht hörbar. Ein Satz wie „Die Entscheidung bleibt.“ fehlt."); } }
+    if (n === "nxt") { const m = t.match(P_NXT); if (m) good.push(`„${m[0]}“ führt das Gespräch zu einem nächsten Schritt.`); else { sc -= 12; bad.push("Es fehlt ein nächster Schritt mit Termin oder Zuständigkeit."); } }
+  }
+  return { score: Math.max(5, Math.min(100, sc)), strength: good[0] || (lenOk ? `Die Länge (${w} Wörter) passt zu einer Antwort im Gespräch.` : "Du hast überhaupt geantwortet, und das ist der Ausgangspunkt für alles Weitere."), improve: bad[0] || "Keine auffällige Schwäche in deinen Worten. Prüfe laut gesprochen, ob der Ton so klingt, wie du ihn meinst.", alt: c.model };
+}
+
+function pScores(s) {
+  const qs = pQuestions(s.sc), by = {};
+  for (const q of qs) { (by[q.d] = by[q.d] || []).push({ id: q.id, q: q.q, sc: pQuestionScore(q, (s.ans || {})[q.id])}); }
+  const dims = {}; for (const k in by) dims[k] = Math.round(by[k].reduce((a, b) => a + b.sc, 0) / by[k].length);
+  const cards = P_SCEN[s.sc].react, rs = cards.map((c) => (s.rsc || {})[c] ?? 0);
+  if (cards.length) dims.stress = Math.round(rs.reduce((a, b) => a + b, 0) / rs.length);
+  const f = Object.entries(by).flatMap(([, v]) => v), fAvg = f.reduce((a, b) => a + b.sc, 0) / f.length;
+  const total = Math.round(fAvg * 0.55 + (dims.stress ?? 0) * 0.45);
+  const blind = [...f].sort((a, b) => a.sc - b.sc).slice(0, 3).filter((x) => x.sc < 80);
+  return { dims, total, blind };
+}
+const pRating = (n) => n >= 75 ? ["Gesprächsreif", "ok"] : n >= 50 ? ["Fast bereit: nachschärfen", "mid"] : ["Noch nicht gesprächsreif", "low"];
+
+// ---- Dossier-Modell (wird für Anzeige und Textexport genutzt) ----
+const pTrim = (t, n = 420) => { t = String(t || "").trim(); return t.length > n ? t.slice(0, n).replace(/\s+\S*$/, "") + " …" : t; };
+function pDossier(s) {
+  const S = P_SCEN[s.sc], A = s.ans || {}, sc = pScores(s), a = (id) => (A[id] || "").trim();
+  const name = (s.who || "").trim() || S.n;
+  const sec = [];
+  sec.push({ h: "Gesprächsreife", b: [{ t: "score", v: sc.total, r: pRating(sc.total) }, { t: "bars", x: Object.entries(sc.dims).map(([k, v]) => [P_DIMS[k], v]) },
+    ...(sc.blind.length ? [{ t: "p", x: "Blinde Flecken, an denen du zuerst weiterarbeiten solltest:" }, { t: "ul", x: sc.blind.map((x) => x.q) }] : [{ t: "p", x: "Keine auffälligen Lücken in deinen Antworten. Prüfe sie trotzdem laut gesprochen." }])] });
+  sec.push({ h: "Deine Kernbotschaft", b: [{ t: "quote", l: "Dein Wortlaut", x: a("ziel1") || "(nicht beantwortet)" }, { t: "quote", l: "Erfolgsmaß für das Gespräch", x: a("ziel2") || "(nicht beantwortet)" }] });
+  sec.push({ h: "Gesprächsdrehbuch", b: [{ t: "steps", x: [
+    ["Eröffnung (ca. 1 Minute)", "Danke, dass du dir Zeit nimmst. Ich komme direkt zum Punkt. Dann deine Kernbotschaft, wörtlich: " + (a("ziel1") ? `„${pTrim(a("ziel1"), 220)}“` : "(fehlt noch)")],
+    ["Begründung (ca. 2 Minuten)", a("fakt1") ? "Nur das, was trägt. Dein Material: " + pTrim(a("fakt1"), 300) : "Nur zwei bis drei tragende Fakten, nicht mehr. (Noch nicht beantwortet.)"],
+    ["Raum geben (so lange wie nötig)", "Stelle offene Fragen und paraphrasiere: „Was ist jetzt für dich am wichtigsten?“, „Wenn ich dich richtig verstehe, …“. Nicht verteidigen, bevor die Person ausgesprochen hat."],
+    ["Linie halten", a("grenz1") ? "Deine Aufteilung: " + pTrim(a("grenz1"), 300) : "Nicht verhandelbar und verhandelbar benennen. (Noch nicht beantwortet.)"],
+    ["Nächste Schritte", a("danach1") ? pTrim(a("danach1"), 300) : "Wer macht was bis wann. (Noch nicht beantwortet.)"],
+    ["Abschluss (ca. 1 Minute)", "Fasse zusammen: „Damit wir dasselbe verstanden haben: …“. Nenne den Folgetermin. Danke für das Gespräch, ohne die Botschaft zu relativieren."],
+  ] }] });
+  sec.push({ h: "Wenn-dann-Karten für die Gegenreaktionen", b: S.react.map((id) => {
+    const c = P_CARDS[id], t = (s.reacts || {})[id], r = t ? pReplyScore(t, c) : null;
+    return { t: "card", title: c.name, rows: [["Wenn kommt", c.line], ["Falle", c.trap], ["Nicht tun", c.dont], ["Deine Antwort", t ? t : "(noch nicht geübt)"], ...(r ? [["Beobachtung", r.improve]] : []), ["Musterformulierung", c.model]] };
+  }) });
+  sec.push({ h: "Rote Linien", b: [{ t: "quote", l: "Nicht verhandelbar / verhandelbar (dein Wortlaut)", x: a("grenz1") || "(nicht beantwortet)" }, { t: "quote", l: "Dein Trigger und dein erster Satz", x: a("emo1") || "(nicht beantwortet)" }] });
+  sec.push({ h: "Risiko und Kommunikation", b: [{ t: "quote", l: "Worst Case und die ersten zehn Minuten", x: a("risiko1") || "(nicht beantwortet)" }, { t: "quote", l: "Wer erfährt wann was", x: a("komm1") || "(nicht beantwortet)" }, ...S.extra.filter((e) => a(e.id)).map((e) => ({ t: "quote", l: e.q, x: a(e.id) }))] });
+  sec.push({ h: "Organisation und Außenwirkung", b: ["org1", "org2", "org3"].map((id) => ({ t: "quote", l: pQuestions(s.sc).find((x) => x.id === id).q, x: a(id) || "(nicht beantwortet)" })) });
+  sec.push({ h: "Notfall-Sätze", b: [{ t: "ul", x: P_PHRASES.map(([k, v]) => `${k}: „${v}“`) }] });
+  sec.push({ h: "Checkliste vor dem Gespräch", b: [{ t: "check", x: [...P_CHECK, ...S.check] }] });
+  sec.push({ h: "Nachbereitung", b: [{ t: "ul", x: ["Innerhalb von 24 Stunden: Ergebnis und Vereinbarungen schriftlich zusammenfassen und bestätigen lassen", "Innerhalb von 7 Tagen: " + (a("danach1") ? pTrim(a("danach1"), 200) : "nächste Schritte mit Verantwortlichen umsetzen"), "Nach 30 Tagen: kurzer Check, was gehalten hat und was nicht, und was du beim nächsten Gespräch anders machen würdest"] }] });
+  if (s.after && s.after.savedAt) {
+    const A2 = s.after, occ = (A2.occ || []).map((id) => { const r = (s.rsc || {})[id]; return `${P_CARDS[id].name}${r != null ? " (deine Übungsbewertung: " + r + ")" : ""}`; });
+    sec.push({ h: "Wirkung und Lernen", b: [
+      { t: "quote", l: "Erfolgsmaß, das du dir gesetzt hattest", x: a("ziel2") || "(nicht beantwortet)" },
+      { t: "p", x: `Erfolgsmaß erreicht: ${A2.goalMet || "?"} von 5 · Vereinbarungen gehalten: ${A2.held || "?"}` },
+      { t: "ul", x: occ.length ? occ : ["Keine der geübten Reaktionen ist eingetreten."] },
+      ...(A2.team ? [{ t: "quote", l: "Reaktion von Team und Umfeld", x: A2.team }] : []),
+      ...(A2.learn ? [{ t: "quote", l: "Beim nächsten Mal anders", x: A2.learn }] : []),
+    ] });
+  }
+  return { name, title: S.label, sec };
+}
+function pDossierText(s) {
+  const d = pDossier(s), L = [`EXIT-COACH · DOSSIER · ${d.title}`, `Gegenüber: ${d.name}`, `Stand: ${new Date().toLocaleDateString("de-AT")}`, "", LEGAL_NOTICE, ""];
+  for (const x of d.sec) {
+    L.push("", x.h.toUpperCase(), "-".repeat(x.h.length));
+    for (const b of x.b) {
+      if (b.t === "score") L.push(`Gesamt: ${b.v} von 100 (${b.r[0]})`);
+      else if (b.t === "bars") b.x.forEach(([k, v]) => L.push(`${k}: ${v}`));
+      else if (b.t === "p") L.push(b.x);
+      else if (b.t === "ul") b.x.forEach((i) => L.push("• " + i));
+      else if (b.t === "quote") L.push(`${b.l}:`, b.x, "");
+      else if (b.t === "steps") b.x.forEach(([h, t], i) => L.push(`${i + 1}. ${h}`, "   " + t));
+      else if (b.t === "card") { L.push(`▸ ${b.title}`); b.rows.forEach(([k, v]) => L.push(`   ${k}: ${v}`)); L.push(""); }
+      else if (b.t === "check") b.x.forEach((i) => L.push("[ ] " + i));
+    }
+  }
+  return L.join("\n");
+}
+
+// ---- Optionale KI-Nachfrage (nur auf Knopfdruck; ohne KI bleibt die Regelprüfung) ----
+const pAIok = () => { try { return effectiveProvider() !== "mock"; } catch { return false; } };
+const P_AI_RULES = "Regeln: Antworte auf Deutsch, knapp und respektvoll, wie ein erfahrener Executive-Coach. Beziehe dich nur auf den Wortlaut der Antwort. Nimm keine Gefühle, Absichten oder Erfahrungen des Gegenübers als Tatsache an und erfinde nichts. Keine verbindliche Rechtsberatung; bei Rechtsfragen verweise auf Fachleute.";
+async function pAI(prompt) { const r = await sampleFn(prompt, { modelTier: "quick", cache: false }); return String(r.text || "").trim(); }
+const pAIErr = "Die KI ist gerade nicht erreichbar. Die Regelprüfung funktioniert weiter.";
+function pAIProbePrompt(s, q, txt) { return `Du bist ein scharfer, fairer Coach, der eine Führungskraft auf ein schwieriges Gespräch vorbereitet („Grill-me“). Szenario: ${P_SCEN[s.sc].label}.\nFrage an die Person: ${q.q}\nAntwort der Person: """${txt}"""\n\nStelle genau EINE Nachfrage (höchstens zwei Sätze), die die schwächste oder unklarste Stelle dieser Antwort konkret herausgreift. Zitiere dafür kurz ein Wort oder eine Wendung aus der Antwort. Gib nur die Nachfrage aus, ohne Einleitung.\n${P_AI_RULES}`; }
+function pAIFbPrompt(c, txt) { return `Du bist Executive-Coach. Die Person übt ein schwieriges Gespräch. Reaktion des Gegenübers: ${c.line}\nAntwort der Person: """${txt}"""\n\nGib drei kurze Abschnitte: „Stärke“ (eine konkrete, mit Zitat aus der Antwort), „Verbesserung“ (eine konkrete, mit Zitat) und „Formulierung“ (ein Alternativsatz, der zum Wortlaut und Ton der Person passt). Höchstens 90 Wörter insgesamt.\n${P_AI_RULES}`; }
+
+// ---- Ansichten ----
+const pLock = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+function viewPrep() {
+  const list = [...memPrep].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  return `
+  <section class="hero">
+    <p class="eyebrow lockline">${pLock}Vertraulich · funktioniert ohne Internet und ohne KI</p>
+    <h1>Bereite jedes Szenario vor, bevor es dich vorbereitet findet.</h1>
+    <p class="lead">Der Coach grillt dich: Er hakt bei vagen Antworten nach, spielt die schwierigsten Gegenreaktionen durch und baut aus deinen eigenen Worten ein Gesprächs-Dossier.</p>
+    <p class="eyebrow dur">ca. 30 Minuten · 8 Szenarien · mit Nachgespräch und Lernspiegel</p>
+  </section>
+  <section class="stack-lg"><h2>Welches Gespräch steht an?</h2>
+    ${P_GROUPS.map(([g, ids]) => `<div class="stack"><p class="eyebrow">${g}</p><ul class="list list-grid">${ids.map((id) => { const S = P_SCEN[id]; return `<li class="item"><button class="item-open pscen" data-pa="new" data-sc="${id}"><b>${esc(S.label)}</b><span class="small muted">${esc(S.sub)}</span><span class="eyebrow pdur">ca. ${S.min || 30} Min.</span></button></li>`; }).join("")}</ul></div>`).join("")}
+  </section>
+  ${pLearn()}
+  ${list.length ? `<section class="stack"><h2>Deine Vorbereitungen</h2><ul class="list">${list.map((s) => { const sc = pScores(s), steps = pSteps(s); return `<li class="item"><div class="item-main"><button class="item-open" data-pa="open" data-id="${esc(s.id)}"><b>${esc(P_SCEN[s.sc].label)}${s.who ? " · " + esc(s.who) : ""}</b><span class="small muted">${fmtDate(s.updatedAt)} · ${s.done ? "Dossier fertig · Reife " + sc.total + "/100" + (s.after && s.after.savedAt ? " · Wirkung erfasst" : (Date.now() - new Date(s.doneAt || s.createdAt).getTime() > 6048e5 ? " · Nachgespräch fällig" : "")) : "Schritt " + (Math.min(s.step || 0, steps.length - 1) + 1) + " von " + steps.length}</span></button><button class="item-del" data-pa="del" data-id="${esc(s.id)}">Löschen</button></div></li>`; }).join("")}</ul></section>` : ""}
+  <section class="stack"><div class="pact"><button class="btn" data-pa="pexport">Sicherung speichern</button><button class="btn" data-pa="pimport">Sicherung einlesen</button><input type="file" id="p-imp" accept="application/json,.json" hidden></div>${ui.pmsg ? `<p class="small" role="status">${esc(ui.pmsg)}</p>` : ""}<p class="hint">Mit der Sicherung nimmst du deine Vorbereitungen auf ein anderes Gerät mit.</p></section>
+  <details class="method"><summary>So wird bewertet, und was es nicht kann</summary>
+    <p>Die Auswertung prüft die Form deiner Texte: Länge, Absicherungswörter („eigentlich“, „leider“), Konkretheit (Zahl, Datum), Vermutungen über andere, eine hörbare Grenze, einen nächsten Schritt. Bei den Gegenreaktionen zählt außerdem, ob du in eigenen Worten antwortest und nicht die Musterformulierung abschreibst.</p>
+    <p>Sie bewertet nicht, ob deine Entscheidung richtig ist, ob die Fakten stimmen oder wie das Gegenüber reagiert. Nur die KI-Nachfrage geht auf den Inhalt ein. Die Gesamtnote ist eine Orientierung, kein Maß für den Erfolg. Das zeigt erst das Nachgespräch.</p>
+    <p><button class="linkbtn" data-pa="pcatalog">Alle Inhalte für die Fachprüfung als Textdatei laden</button></p></details>
+  <div class="note note-legal" role="note"><b>Version zur Erprobung</b><br>Fragen, Szenarien und Musterformulierungen sind noch nicht von Fachleuten (Arbeitsrecht, HR, Verhandlung) geprüft. Prüfe wichtige Gespräche zusätzlich mit ihnen.</div>
+  <p class="small muted">Alles bleibt in diesem Browser. Die Auswertung prüft nur, was in deinen Texten steht (zu kurz, zu vage, Absicherungswörter, fehlende Grenze), und trifft keine Aussagen über andere Menschen. Sie ersetzt keine Rechtsberatung. Die Spracheingabe braucht in Chrome und Edge Internet, das Tippen nicht.</p>`;
+}
+function pProgress(s) {
+  const steps = pSteps(s), i = s.step || 0, nq = pQuestions(s.sc).length;
+  const phase = i === 0 ? "Start" : i <= nq ? "Fundament" : "Stresstest";
+  return `<div class="pprog" role="progressbar" aria-valuemin="0" aria-valuemax="${steps.length}" aria-valuenow="${i + 1}" aria-label="Fortschritt"><i style="width:${Math.round(((i + 1) / steps.length) * 100)}%"></i></div><p class="eyebrow">${phase} · ${i + 1} von ${steps.length}</p>`;
+}
+function viewPrepRun() {
+  const s = pGet(ui.pid); if (!s) return viewPrep();
+  const steps = pSteps(s), i = Math.min(s.step || 0, steps.length - 1), id = steps[i], S = P_SCEN[s.sc];
+  const last = i === steps.length - 1;
+  const nav = (primary, disabled) => `<div class="pnav">${i > 0 ? `<button class="btn" data-pa="back">Zurück</button>` : `<button class="btn" data-go="prep">Abbrechen</button>`}<button class="btn btn-primary" data-pa="next" ${disabled ? "disabled" : ""}>${primary}</button></div>`;
+  let body = "";
+  if (id === "ctx") {
+    body = `<section class="panel panel-coach"><div class="ph"><span class="tag">Grill-me</span><span class="t">${esc(S.label)}</span></div><div class="pb stack">
+      <p>So läuft es ab: ${pQuestions(s.sc).length} Fragen zum Fundament, danach ${S.react.length} Gegenreaktionen unter Zeitdruck, am Ende dein Dossier. Der Coach fragt nach, wenn Antworten vage sind. Antworte so, wie du es morgen im Raum sagen würdest.</p>
+      <div><label class="lbl" for="p-who">Mit wem sprichst du? (optional, nur für dich)</label><input id="p-who" class="field" data-pwho value="${esc(s.who || "")}" placeholder="z. B. Tom, Frau Berger, die Geschäftsführung"></div>
+      <label class="chk"><input type="checkbox" data-ptimed ${s.timed ? "checked" : ""}> Stresstest mit Zeitdruck (90 Sekunden pro Reaktion)</label>
+      ${legalBox()}</div></section>${nav("Los geht’s")}`;
+  } else if (id.startsWith("r:")) {
+    const cid = id.slice(2), c = P_CARDS[cid], t = (s.reacts || {})[cid] || "", shown = ui.preveal === cid, r = shown ? pReplyScore(t, c) : null;
+    body = `<section class="panel panel-role"><div class="ph"><span class="tag">Gegenüber</span><span class="t">${esc(c.name)}</span>${s.timed && !shown ? `<span class="r" id="p-timer" data-sec="90">1:30</span>` : ""}</div><div class="pb stack">
+      <p class="pline">${esc(c.line)}</p>
+      <div><label class="lbl" for="p-ans">Was sagst du jetzt, wörtlich?</label><div class="mic-wrap"><textarea id="p-ans" class="field" data-pans="r:${cid}" rows="4" placeholder="Schreib deine Antwort so, wie du sie sagen würdest …">${esc(t)}</textarea></div></div>
+    </div></section>
+    ${shown ? `<section class="panel panel-fb"><div class="ph"><span class="tag">Feedback</span><span class="t">${r.score} von 100</span></div><div class="pb stack">
+      <div><b>Was gut war</b><p>${esc(r.strength)}</p></div><div><b>Woran du arbeiten kannst</b><p>${esc(r.improve)}</p></div><div><b>Eine Alternative zum Vergleich</b><p class="alt">${esc(r.alt)}</p></div>
+      <p class="small muted">Falle: ${esc(c.trap)} · Nicht tun: ${esc(c.dont)}</p>
+      ${s.aiF && s.aiF[cid] ? `<div class="grill grill-ai"><span class="eyebrow">KI-Bewertung</span><p>${esc(s.aiF[cid]).replace(/\n/g, "<br>")}</p></div>` : ""}
+      ${ui.paierr === "r:" + cid ? `<div class="note note-err" role="alert"><span>${esc(pAIErr)}</span></div>` : ""}
+      ${pAIok() ? `<button class="btn" data-pa="aifb" ${ui.paibusy === "r:" + cid ? "disabled" : ""}>${ui.paibusy === "r:" + cid ? "Der Coach liest …" : "Zusätzlich KI-Bewertung holen"}</button>` : ""}</div></section>
+      <div class="pnav"><button class="btn" data-pa="revise">Nochmal versuchen</button><button class="btn btn-primary" data-pa="next">${last ? "Dossier erstellen" : "Weiter"}</button></div>`
+      : `<div class="pnav"><button class="btn" data-pa="back">Zurück</button><button class="btn btn-primary" data-pa="reveal" ${t.trim() ? "" : "disabled"}>Antwort abgeben</button></div>`}`;
+  } else {
+    const q = pQuestions(s.sc).find((x) => x.id === id), t = (s.ans || {})[id] || "";
+    const probe = ui.pprobe === id ? pProbe(q, t, { n: S.n, d: S.d }) : null;
+    body = `<section class="panel panel-coach"><div class="ph"><span class="tag">Grill-me</span><span class="t">${esc(P_DIMS[q.d])}</span></div><div class="pb stack">
+      <p class="pq">${esc(q.q)}</p>
+      <div class="mic-wrap"><textarea id="p-ans" class="field" data-pans="${id}" rows="5" placeholder="Deine Antwort, in deinen eigenen Worten …">${esc(t)}</textarea></div>
+      <p class="hint">${esc(q.why)}</p>
+      ${s.ai && s.ai[id] ? `<div class="grill grill-ai" role="note"><span class="eyebrow">KI-Nachfrage</span><p>${esc(s.ai[id]).replace(/\n/g, "<br>")}</p></div>` : ""}
+      ${ui.paierr === id ? `<div class="note note-err" role="alert"><span>${esc(pAIErr)}</span></div>` : ""}
+      ${pAIok() ? `<button class="btn" data-pa="aiprobe" ${ui.paibusy === id || !t.trim() ? "disabled" : ""}>${ui.paibusy === id ? "Der Coach liest …" : "Mit KI nachhaken"}</button><p class="hint">Sendet nur diese eine Antwort an den eingestellten KI-Anbieter.</p>` : ""}
+      ${probe ? `<div class="grill" role="alert"><span class="eyebrow">Nachgehakt</span><b>${esc(probe.head)}</b><p>${esc(probe.text)}</p><p class="small">Schärfe deine Antwort oben, oder gehe so weiter.</p></div>` : ""}
+    </div></section>
+    <div class="pnav"><button class="btn" data-pa="back">Zurück</button><button class="btn btn-primary" data-pa="next">${probe ? "Trotzdem weiter" : "Weiter"}</button></div>`;
+  }
+  return `<div class="stack-lg"><header class="stack"><button class="linkbtn" data-go="prep" style="align-self:flex-start">← Alle Szenarien</button>${pProgress(s)}</header>${body}</div>`;
+}
+function viewPrepAfter() {
+  const s = pGet(ui.pid); if (!s) return viewPrep();
+  const A = s.after || {}, S = P_SCEN[s.sc], goal = ((s.ans || {}).ziel2 || "").trim();
+  const rate = (k, opts) => `<div class="prate" role="group">${opts.map(([v, l]) => `<button type="button" class="btn ${A[k] === v ? "btn-primary" : ""}" data-pa="afset" data-k="${k}" data-v="${v}" aria-pressed="${A[k] === v}">${l}</button>`).join("")}</div>`;
+  return `<div class="stack-lg"><header class="stack"><button class="linkbtn" data-go="prepDossier" style="align-self:flex-start">← Zurück zum Dossier</button>
+    <p class="eyebrow">Nachgespräch · ${esc(S.label)}</p><h1>Was ist wirklich passiert?</h1>
+    <p class="lead muted">Trage ein, wie es gelaufen ist, am besten nach ein bis vier Wochen. Das Ergebnis fließt in deinen Lernspiegel ein.</p></header>
+    <section class="panel panel-coach"><div class="ph"><span class="tag">Wirkung</span><span class="t">Erfolgsmaß und Vereinbarungen</span></div><div class="pb stack">
+      ${goal ? `<blockquote class="pquote"><span class="eyebrow">Dein Erfolgsmaß</span><p>${esc(goal)}</p></blockquote>` : ""}
+      <div><b>Wie weit wurde es erreicht?</b>${rate("goalMet", [["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"]])}<p class="hint">1 = gar nicht, 5 = vollständig</p></div>
+      <div><b>Wurden die Vereinbarungen gehalten?</b>${rate("held", [["ja", "Ja"], ["teilweise", "Teilweise"], ["nein", "Nein"]])}</div>
+      <div><b>Welche der geübten Reaktionen sind eingetreten?</b><ul class="pcheck">${S.react.map((id) => `<li><label><input type="checkbox" data-pocc="${id}" ${(A.occ || []).includes(id) ? "checked" : ""}> ${esc(P_CARDS[id].name)}</label></li>`).join("")}</ul></div>
+    </div></section>
+    <section class="panel panel-coach"><div class="ph"><span class="tag">Lernen</span><span class="t">Team, Umfeld, nächstes Mal</span></div><div class="pb stack">
+      <div><label class="lbl" for="af-team">Wie haben Team, Kunden oder Umfeld reagiert? Nur, was du beobachtet hast.</label><div class="mic-wrap"><textarea id="af-team" class="field" data-paf="team" rows="4">${esc(A.team || "")}</textarea></div></div>
+      <div><label class="lbl" for="af-learn">Was machst du beim nächsten Mal anders?</label><div class="mic-wrap"><textarea id="af-learn" class="field" data-paf="learn" rows="4">${esc(A.learn || "")}</textarea></div></div>
+    </div></section>
+    <div class="pnav"><button class="btn" data-go="prepDossier">Abbrechen</button><button class="btn btn-primary" data-pa="afsave" ${A.goalMet && A.held ? "" : "disabled"}>Speichern</button></div></div>`;
+}
+function pLearn() {
+  const L = memPrep.filter((s) => s.after && s.after.savedAt); if (!L.length) return "";
+  const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
+  const goals = L.map((s) => +s.after.goalMet).filter(Boolean), held = L.filter((s) => s.after.held === "ja").length;
+  const cnt = {}; L.forEach((s) => (s.after.occ || []).forEach((id) => { (cnt[id] = cnt[id] || []).push((s.rsc || {})[id] ?? null); }));
+  const rows = Object.entries(cnt).sort((a, b) => b[1].length - a[1].length).slice(0, 4).map(([id, v]) => { const sc = v.filter((x) => x != null), m = sc.length ? Math.round(avg(sc)) : null; return `<li><b>${esc(P_CARDS[id].name)}</b>: ${v.length}× eingetreten${m != null ? `, Übungsbewertung Ø ${m}${m < 70 ? ". Hier lohnt sich mehr Training." : "."}` : "."}</li>`; });
+  const learn = L.map((s) => s.after.learn).filter(Boolean).slice(-3);
+  return `<section class="stack"><h2>Dein Lernspiegel</h2><div class="pscore"><span class="num">${goals.length ? avg(goals).toFixed(1) : "–"}</span><span><b>Ø Erfolgsmaß erreicht (von 5)</b><br><span class="small muted">${L.length} Nachgespräch${L.length === 1 ? "" : "e"} · Vereinbarungen gehalten: ${held} von ${L.length}</span></span></div>
+    ${rows.length ? `<ul class="pul">${rows.join("")}</ul>` : ""}${learn.length ? `<blockquote class="pquote"><span class="eyebrow">Deine letzten Erkenntnisse</span>${learn.map((x) => `<p>${esc(x)}</p>`).join("")}</blockquote>` : ""}</section>`;
+}
+function pBlock(b, s) {
+  const S = P_SCEN[s.sc];
+  switch (b.t) {
+    case "score": return `<div class="pscore ${b.r[1]}"><span class="stufe">${esc(b.r[0])}</span><span class="small muted"><b class="znum">${b.v} / 100</b> · Regelprüfung der Form (Länge, Konkretheit, Absicherungen, Grenzen), keine inhaltliche Bewertung.</span></span></div>`;
+    case "bars": return `<div class="pbars">${b.x.map(([k, v]) => `<div class="pbar"><span>${esc(k)}</span><span class="track"><i style="width:${v}%"></i></span><b>${v}</b></div>`).join("")}</div>`;
+    case "p": return `<p>${esc(b.x)}</p>`;
+    case "ul": return `<ul class="pul">${b.x.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    case "quote": return `<blockquote class="pquote"><span class="eyebrow">${esc(b.l)}</span><p>${esc(b.x).replace(/\n/g, "<br>")}</p></blockquote>`;
+    case "steps": return `<ol class="psteps">${b.x.map(([h, t]) => `<li><b>${esc(h)}</b><p>${esc(t)}</p></li>`).join("")}</ol>`;
+    case "card": return `<div class="pcard"><b>${esc(b.title)}</b>${b.rows.map(([k, v]) => `<p><span class="eyebrow">${esc(k)}</span><br>${esc(v)}</p>`).join("")}</div>`;
+    case "check": return `<ul class="pcheck">${b.x.map((x, i) => `<li><label><input type="checkbox" data-pcheck="${i}" ${(s.check || {})[i] ? "checked" : ""}> ${esc(x)}</label></li>`).join("")}</ul>`;
+  }
+  return "";
+}
+function viewPrepDossier() {
+  const s = pGet(ui.pid); if (!s) return viewPrep();
+  const d = pDossier(s);
+  return `<div class="stack-lg pdoss">
+    <header class="stack"><button class="linkbtn noprint" data-go="prep" style="align-self:flex-start">← Alle Szenarien</button>
+      <div class="printhead"><span class="wm2">AIDA ĐULIĆ · EXIT-COACH</span><span>Vertraulich · ${new Date().toLocaleDateString("de-AT")}</span></div>
+      <p class="eyebrow">Dossier · ${esc(d.title)}</p><h1>Dein Gesprächs-Dossier${s.who ? " für " + esc(s.who) : ""}</h1>
+      <div class="noprint pact"><button class="btn btn-primary" data-pa="practice">Im Rollenspiel üben</button><button class="btn" data-pa="print">Als PDF speichern</button><button class="btn" data-pa="after">Nachgespräch erfassen</button><button class="btn" data-pa="copy">Text kopieren</button><button class="btn" data-pa="download">Als Textdatei laden</button></div>
+      <p class="small muted noprint" id="p-msg" role="status"></p></header>
+    ${legalBox()}
+    ${d.sec.map((x) => `<section class="psec"><h2>${esc(x.h)}</h2>${x.b.map((b) => pBlock(b, s)).join("")}</section>`).join("")}
+    <p class="printfoot">Vertraulich. Keine Rechtsberatung: Der Coach ersetzt keine verbindliche Auskunft von Fachleuten.</p>
+    <div class="noprint pnav"><button class="btn" data-pa="redo">Fragen überarbeiten</button><button class="btn btn-primary" data-go="prep">Fertig</button></div>
+  </div>`;
+}
+
+function pCatalogText() {
+  const L = ["EXIT-COACH · INHALTSKATALOG FÜR DIE FACHPRÜFUNG", "Stand: " + new Date().toLocaleDateString("de-AT"), "", "Bitte je Eintrag prüfen: passt / ändern / streichen, mit Vorschlag. " + LEGAL_NOTICE, ""];
+  Object.entries(P_SCEN).forEach(([id, S]) => {
+    L.push("", "=".repeat(70), "SZENARIO: " + S.label + " (" + S.sub + ")", "=".repeat(70), "", "FRAGEN");
+    pQuestions(id).forEach((q, i) => { L.push(`${i + 1}. [${P_DIMS[q.d]}] ${q.q}`, `   Warum: ${q.why}`, `   Nachhaken: ${q.probe}`); });
+    L.push("", "GEGENREAKTIONEN");
+    S.react.forEach((r) => { const c = P_CARDS[r]; L.push(`- ${c.name}: ${c.line}`, `  Falle: ${c.trap}`, `  Nicht tun: ${c.dont}`, `  Musterformulierung: ${c.model}`); });
+    L.push("", "SZENARIO-CHECKLISTE"); S.check.forEach((x) => L.push("[ ] " + x));
+  });
+  L.push("", "=".repeat(70), "ALLGEMEIN", "=".repeat(70), "", "NOTFALL-SÄTZE"); P_PHRASES.forEach(([k, v]) => L.push(`- ${k}: ${v}`));
+  L.push("", "CHECKLISTE VOR DEM GESPRÄCH"); P_CHECK.forEach((x) => L.push("[ ] " + x));
+  L.push("", "AUSWERTUNG (Regelprüfung der Form)", "- Antworten: Länge, Absicherungswörter, Konkretheit (Zahl/Datum), Vermutungen über das Gegenüber, Trennung nicht verhandelbar/verhandelbar.", "- Reaktionen: Länge, Absicherungen, Abwehr-Einstieg, Zuhör-Signal, hörbare Grenze, nächster Schritt, Gefühl als Tatsache, Zusagen, fast wörtliche Übernahme der Musterformulierung.", "- Gesamtnote: 55 % Fundament, 45 % Reaktionen. Stufen: ab 75 gesprächsreif, ab 50 nachschärfen.");
+  return L.join("\n");
+}
+// ---- Aktionen ----
+function pAfterRender() {
+  if (ui.ptm) { clearInterval(ui.ptm); ui.ptm = null; }
+  const el = document.getElementById("p-timer");
+  if (el) { let n = 90; ui.ptm = setInterval(() => { n--; const e = document.getElementById("p-timer"); if (!e) { clearInterval(ui.ptm); ui.ptm = null; return; } e.textContent = n > 0 ? Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0") : "Zeit um"; if (n <= 0) { clearInterval(ui.ptm); ui.ptm = null; } }, 1000); }
+}
+function pFlash(m) { const e = document.getElementById("p-msg"); if (e) e.textContent = m; }
+document.addEventListener("click", async (ev) => {
+  const t = ev.target.closest("[data-pa]"); if (!t) return;
+  const a = t.dataset.pa, d = t.dataset;
+  if (a === "new") {
+    const s = { id: uid(), sc: d.sc, who: "", timed: false, step: 0, ans: {}, probed: {}, reacts: {}, rsc: {}, check: {}, done: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    memPrep.push(s); pSave(); ui.pid = s.id; ui.pprobe = null; ui.preveal = null; go("prepRun"); return;
+  }
+  if (a === "open") { const s = pGet(d.id); ui.pid = d.id; ui.pprobe = null; ui.preveal = null; go(s && s.done ? "prepDossier" : "prepRun"); return; }
+  if (a === "del") { memPrep = memPrep.filter((x) => x.id !== d.id); pSave(); render(); return; }
+  if (a === "pexport") {
+    const blob = new Blob([JSON.stringify({ app: "exit-coach-prep", v: 1, items: memPrep }, null, 1)], { type: "application/json" }), u = URL.createObjectURL(blob), l = document.createElement("a");
+    l.href = u; l.download = "Exit-Coach-Sicherung.json"; document.body.append(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000); return;
+  }
+  if (a === "pcatalog") {
+    const blob = new Blob([pCatalogText()], { type: "text/plain;charset=utf-8" }), u = URL.createObjectURL(blob), l = document.createElement("a");
+    l.href = u; l.download = "Exit-Coach-Inhaltskatalog.txt"; document.body.append(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000); return;
+  }
+  if (a === "pimport") { document.getElementById("p-imp")?.click(); return; }
+  const s = pGet(ui.pid); if (!s) return;
+  const steps = pSteps(s), i = s.step || 0, id = steps[i];
+  if (a === "back") { ui.pprobe = null; ui.preveal = null; pUpdate(s.id, (x) => ({ ...x, step: Math.max(0, i - 1) })); window.scrollTo(0, 0); return; }
+  if (a === "aiprobe" || a === "aifb") {
+    const key = a === "aiprobe" ? id : id, isR = id.startsWith("r:");
+    const txt = isR ? ((s.reacts || {})[id.slice(2)] || "") : ((s.ans || {})[id] || ""); if (!txt.trim()) return;
+    const prompt = isR ? pAIFbPrompt(P_CARDS[id.slice(2)], txt) : pAIProbePrompt(s, pQuestions(s.sc).find((x) => x.id === id), txt);
+    ui.paibusy = id; ui.paierr = null; render();
+    try { const out = await pAI(prompt); if (!out) throw 0; pUpdate(s.id, (x) => isR ? { ...x, aiF: { ...(x.aiF || {}), [id.slice(2)]: out } } : { ...x, ai: { ...(x.ai || {}), [id]: out } }, false); }
+    catch { ui.paierr = id; }
+    ui.paibusy = null; if (ui.pid === s.id && (pSteps(s)[(pGet(s.id).step || 0)] === id)) render(); return;
+  }
+  if (a === "revise") { ui.preveal = null; render(); return; }
+  if (a === "reveal") { const cid = id.slice(2), r = pReplyScore((s.reacts || {})[cid], P_CARDS[cid]); ui.preveal = cid; pUpdate(s.id, (x) => ({ ...x, rsc: { ...x.rsc, [cid]: r.score } })); return; }
+  if (a === "next") {
+    if (id !== "ctx" && !id.startsWith("r:")) {
+      const q = pQuestions(s.sc).find((x) => x.id === id), txt = (s.ans || {})[id] || "";
+      if (ui.pprobe !== id && !(s.probed || {})[id]) {
+        const p = pProbe(q, txt, { n: P_SCEN[s.sc].n, d: P_SCEN[s.sc].d });
+        if (p) { ui.pprobe = id; pUpdate(s.id, (x) => ({ ...x, probed: { ...x.probed, [id]: true } })); return; }
+      }
+    }
+    ui.pprobe = null; ui.preveal = null;
+    if (i >= steps.length - 1) { pUpdate(s.id, (x) => ({ ...x, done: true, doneAt: x.doneAt || new Date().toISOString() })); go("prepDossier"); return; }
+    pUpdate(s.id, (x) => ({ ...x, step: i + 1 })); window.scrollTo(0, 0); return;
+  }
+  if (a === "after") { go("prepAfter"); return; }
+  if (a === "afset") { pUpdate(s.id, (x) => ({ ...x, after: { ...(x.after || {}), [d.k]: d.v } })); return; }
+  if (a === "afsave") { pUpdate(s.id, (x) => ({ ...x, after: { ...(x.after || {}), savedAt: new Date().toISOString() } })); go("prepDossier"); window.scrollTo(0, 0); return; }
+  if (a === "redo") { ui.pprobe = null; ui.preveal = null; pUpdate(s.id, (x) => ({ ...x, done: false, step: 1 })); go("prepRun"); return; }
+  if (a === "print") { window.print(); return; }
+  if (a === "copy") {
+    const txt = pDossierText(s);
+    try { await navigator.clipboard.writeText(txt); pFlash("Dossier in die Zwischenablage kopiert."); }
+    catch { const ta = document.createElement("textarea"); ta.value = txt; document.body.append(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} ta.remove(); pFlash(ok ? "Dossier kopiert." : "Kopieren wurde vom Browser blockiert. Nutze „Als Textdatei laden“."); }
+    return;
+  }
+  if (a === "download") {
+    const blob = new Blob([pDossierText(s)], { type: "text/plain;charset=utf-8" }), u = URL.createObjectURL(blob), l = document.createElement("a");
+    l.href = u; l.download = "Gespraechs-Dossier.txt"; document.body.append(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000); pFlash("Textdatei geladen."); return;
+  }
+  if (a === "practice") {
+    const A = s.ans || {}, S = P_SCEN[s.sc];
+    ui.form = { ...blankForm(), scenario: S.map, difficulty: "schwer", counterpartLabel: (s.who || "").trim(), situation: (A.ziel1 || "").trim(), relationship: (A.geg1 || "").trim(), goal: (A.ziel2 || "").trim(), difficultMoments: S.react.map((r) => P_CARDS[r].line.replace(/[„“]/g, "")).slice(0, 3).join(" · "), experience: (A.geg2 || "").trim(), writingSample: "" };
+    go("form"); return;
+  }
+});
+document.addEventListener("input", (ev) => {
+  const el = ev.target, d = el.dataset; if (!ui.pid) return;
+  if ("paf" in d) { pUpdate(ui.pid, (s) => ({ ...s, after: { ...(s.after || {}), [d.paf]: el.value } }), false); return; }
+  if (!(("pans" in d) || ("pwho" in d))) return;
+  if ("pwho" in d) { pUpdate(ui.pid, (s) => ({ ...s, who: el.value }), false); return; }
+  const id = d.pans, b = $('[data-pa="reveal"]');
+  if (id.startsWith("r:")) { pUpdate(ui.pid, (s) => ({ ...s, reacts: { ...s.reacts, [id.slice(2)]: el.value } }), false); if (b) b.disabled = !el.value.trim(); }
+  else pUpdate(ui.pid, (s) => ({ ...s, ans: { ...s.ans, [id]: el.value } }), false);
+  if (!id.startsWith("r:")) { const ab = $('[data-pa="aiprobe"]'); if (ab && ui.paibusy !== id) ab.disabled = !el.value.trim(); }
+});
+document.addEventListener("change", (ev) => {
+  if (ev.target.id === "p-imp") {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    f.text().then((txt) => {
+      try { const j = JSON.parse(txt); if (j.app !== "exit-coach-prep" || !Array.isArray(j.items)) throw 0; const ids = new Set(memPrep.map((x) => x.id)); let n = 0; for (const it of j.items) if (it && it.id && P_SCEN[it.sc] && !ids.has(it.id)) { memPrep.push(it); n++; } pSave(); ui.pmsg = n + " Vorbereitung" + (n === 1 ? "" : "en") + " eingelesen."; }
+      catch { ui.pmsg = "Diese Datei ist keine gültige Exit-Coach-Sicherung."; }
+      render();
+    });
+    return;
+  }
+  const el = ev.target, d = el.dataset; if (!ui.pid) return;
+  if ("pocc" in d) pUpdate(ui.pid, (s) => { const o = new Set((s.after || {}).occ || []); el.checked ? o.add(d.pocc) : o.delete(d.pocc); return { ...s, after: { ...(s.after || {}), occ: [...o] } }; }, false);
+  if ("ptimed" in d) pUpdate(ui.pid, (s) => ({ ...s, timed: el.checked }), false);
+  if ("pcheck" in d) pUpdate(ui.pid, (s) => ({ ...s, check: { ...s.check, [d.pcheck]: el.checked } }), false);
+});
+
+// ---------------- Start ----------------
+loadAll();
+render();
+(async () => {
+  try {
+    const s = window.claude?.use ? await window.claude.use("sample") : null;
+    sampleFn = s; sampleState = s ? "ready" : "absent";
+  } catch { sampleState = "absent"; }
+  if (ui.view !== "session" || ui.streaming === null) render();
+})();
+})();
+</script>
+<style>
+.pf-fab{position:fixed;right:14px;bottom:14px;z-index:30;background:#12295a;color:#fff;text-decoration:none;font:600 13px/1 var(--font);padding:11px 15px;border-radius:999px;box-shadow:0 4px 14px rgba(18,41,90,.3)}
+.pf-fab:hover{background:#b0116f}
+.pf-foot{max-width:42rem;margin:0 auto;padding:8px 16px 90px;font-size:12px;line-height:1.5;color:var(--muted)}
+@media print{.pf-fab,.pf-foot{display:none}}
+</style>
+<a class="pf-fab" href="../">← Hauptseite</a>
+<p class="pf-foot">Konzeptstudie mit erfundenen Beispieldaten, keine Rechtsberatung. Konzept und Entwicklung: Aida Đulić, © 2026. Alle Rechte vorbehalten, keine Weiterverwendung ohne schriftliche Zustimmung. <a href="../">Zurück zum Portfolio</a></p>
+</body></html>
