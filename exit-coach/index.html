@@ -268,8 +268,18 @@ details.more > div { border-top: 1px solid var(--line); padding: 13px; display: 
   .pbar .track i { background: #12295a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .method, details { display: none; }
 }
+
+.preview { cursor: pointer; transition: transform .15s, background .15s; } .preview:hover, .preview:focus-visible { background: rgba(255,255,255,.14); transform: translateY(-2px); outline: 2px solid #ff8fc9; outline-offset: 2px; }
+.pv-cta { align-self: flex-start; font-weight: 700; font-size: 14px; color: #ff8fc9; }
+.flow-btns li:not(:last-child)::after { content: none; }
+.flow-btns { gap: 8px; }
+.flowbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 14px; min-height: 44px; font-size: 14px; color: var(--ink); cursor: pointer; }
+.flowbtn:hover { background: var(--surface-2); } .flowbtn.on { background: var(--coach); color: #fff; border-color: var(--coach); }
+.flowcard { border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--surface); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; } .flowcard p { margin: 0; }
+.flowex { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; font-style: italic; } .flowex .eyebrow { font-style: normal; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
+
 
 <header class="top">
   <nav>
@@ -368,35 +378,96 @@ function update(id, fn, rerender = true) {
 }
 
 // ---------------- KI-Anbieter ----------------
-// Zwei Anbieter: Claude (über das Konto der Person, die die Seite öffnet) und ein lokaler Mock.
-let sampleFn = null;           // aufgelöst über claude.use("sample")
-let sampleState = "pending";   // pending | ready | absent | denied
+// Ohne Server: Der Besucher trägt seinen eigenen API-Schlüssel ein; die Anfragen gehen direkt vom Browser an den Anbieter.
+// Der Schlüssel wird nie in dieser Datei gespeichert, standardmäßig nur für die laufende Browsersitzung.
+const VENDORS = {
+  openai: { label: "OpenAI", model: "gpt-6-astra", needsBase: false },
+  anthropic: { label: "Anthropic (Claude)", model: "claude-sonnet-5-5", needsBase: false },
+  gemini: { label: "Google Gemini", model: "gemini-3.8-flash", needsBase: false },
+  compat: { label: "OpenAI-kompatibel (z. B. Groq, Ollama)", model: "", needsBase: true },
+};
 const PROVIDERS = {
-  claude: { id: "claude", label: "Claude (nur in der Claude-Umgebung)", external: true },
+  live: { id: "live", label: "KI mit eigenem API-Schlüssel", external: true },
   mock: { id: "mock", label: "Mock (lokal, ohne KI)", external: false },
 };
-const claudeUsable = () => sampleState === "ready" && !!sampleFn;
-function effectiveProvider() {
-  const want = memSettings.providerId;
-  if (want === "mock") return "mock";
-  if (want === "claude") return claudeUsable() ? "claude" : "mock";
-  return claudeUsable() ? "claude" : "mock";
+const KEY_API = "exitcoach.apikey.v1";
+let apiKey = "";
+function loadKey() { try { apiKey = sessionStorage.getItem(KEY_API) || localStorage.getItem(KEY_API) || ""; } catch { apiKey = ""; } }
+function saveKey() {
+  try { sessionStorage.removeItem(KEY_API); localStorage.removeItem(KEY_API); } catch {}
+  try { (memSettings.rememberKey ? localStorage : sessionStorage).setItem(KEY_API, apiKey); } catch {}
 }
-const effectiveTier = () => memSettings.tier || "default";
-const providerText = (p, tier) => p === "claude" ? `Claude · ${TIERS[tier] || TIERS.default}` : "Mock (lokal)";
+const vendorModel = () => (memSettings.model || VENDORS[memSettings.vendor || "anthropic"].model || "").trim();
+const liveUsable = () => !!(apiKey && memSettings.vendor && VENDORS[memSettings.vendor] && vendorModel() && (!VENDORS[memSettings.vendor].needsBase || memSettings.baseUrl));
+function effectiveProvider() {
+  if (memSettings.providerId === "mock") return "mock";
+  return liveUsable() ? "live" : "mock";
+}
+const effectiveTier = () => liveUsable() ? `${memSettings.vendor}:${vendorModel()}` : "default";
+const providerText = (p, tier) => p === "live" ? `${VENDORS[String(tier).split(":")[0]]?.label || "KI"} · ${String(tier).split(":").slice(1).join(":") || "Modell"}` : "Mock (lokal)";
+
+function extractJson(text) {
+  const t = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+  try { return JSON.parse(t); } catch {}
+  const i = t.indexOf("{"), j = t.lastIndexOf("}");
+  if (i >= 0 && j > i) { try { return JSON.parse(t.slice(i, j + 1)); } catch {} }
+  throw { code: "invalid_json" };
+}
+async function* sseData(res) {
+  const reader = res.body.getReader(), dec = new TextDecoder(); let buf = "";
+  for (;;) {
+    const { done, value } = await reader.read(); if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i; while ((i = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (line.startsWith("data:")) { const d = line.slice(5).trim(); if (d && d !== "[DONE]") yield d; }
+    }
+  }
+}
+function vendorRequest(v, model, prompt) {
+  const json = { "content-type": "application/json" };
+  if (v === "openai") return { url: "https://api.openai.com/v1/responses", headers: { ...json, authorization: `Bearer ${apiKey}` }, body: { model, input: prompt, stream: true, store: false }, pick: (e) => e.type === "response.output_text.delta" ? e.delta : "" };
+  if (v === "anthropic") return { url: "https://api.anthropic.com/v1/messages", headers: { ...json, "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" }, body: { model, max_tokens: 3000, stream: true, messages: [{ role: "user", content: prompt }] }, pick: (e) => e.type === "content_block_delta" && e.delta?.type === "text_delta" ? e.delta.text : "" };
+  if (v === "gemini") return { url: `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, headers: { ...json, "x-goog-api-key": apiKey }, body: { contents: [{ role: "user", parts: [{ text: prompt }] }] }, pick: (e) => (e.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("") };
+  const base = String(memSettings.baseUrl || "").replace(/\/+$/, "");
+  return { url: `${base}/chat/completions`, headers: { ...json, authorization: `Bearer ${apiKey}` }, body: { model, stream: true, messages: [{ role: "user", content: prompt }] }, pick: (e) => e.choices?.[0]?.delta?.content || "" };
+}
+async function llmStream(prompt, { json, onText, signal } = {}) {
+  if (!liveUsable()) throw { code: "not_configured" };
+  const v = memSettings.vendor;
+  const req = vendorRequest(v, vendorModel(), json ? prompt + "\n\nAntworte ausschließlich mit einem gültigen JSON-Objekt, ohne Erklärung und ohne Codeblock." : prompt);
+  let res;
+  try { res = await fetch(req.url, { method: "POST", headers: req.headers, body: JSON.stringify(req.body), signal }); }
+  catch (e) { if (e?.name === "AbortError") throw { code: "cancelled" }; throw { code: "network" }; }
+  if (!res.ok) throw { code: "http", status: res.status };
+  let text = "";
+  try {
+    for await (const d of sseData(res)) {
+      let ev; try { ev = JSON.parse(d); } catch { continue; }
+      const piece = req.pick(ev); if (piece) { text += piece; onText && onText({ text }); }
+    }
+  } catch (e) { if (e?.name === "AbortError" || signal?.aborted) throw { code: "cancelled" }; throw { code: "network" }; }
+  if (!text.trim()) throw { code: "empty_completion" };
+  return text;
+}
+const sampleFn = Object.assign(
+  async (prompt, o) => ({ text: await llmStream(prompt, o) }),
+  { json: async (prompt, o) => extractJson(await llmStream(prompt, { ...o, json: true })) },
+);
 
 function sampleErrorText(e) {
   switch (e?.code) {
-    case "not_granted": case "sampling_disabled": case "not_declared": case "capability_disabled": case "capability_removed":
-      sampleState = "denied";
-      return "Claude darf auf dieser Seite gerade nicht antworten. Wechsle in den Einstellungen zum Mock oder erlaube den Zugriff beim nächsten Öffnen.";
-    case "rate_limited": return "Zu viele Anfragen oder dein Nutzungslimit ist erreicht. Bitte versuch es später noch einmal.";
-    case "session_expired": return "Deine Anmeldung ist abgelaufen. Bitte melde dich neu an.";
-    case "refused": return "Claude hat diese Anfrage abgelehnt. Formuliere die Angaben etwas anders.";
+    case "not_configured": return "Die KI ist noch nicht eingerichtet. Trage in den Einstellungen deinen API-Schlüssel ein oder nutze den Mock.";
+    case "http":
+      if (e.status === 401 || e.status === 403) return "Der Anbieter hat den API-Schlüssel abgelehnt. Prüfe Schlüssel und Modellname in den Einstellungen.";
+      if (e.status === 404) return "Modell oder Adresse nicht gefunden. Prüfe den Modellnamen in den Einstellungen.";
+      if (e.status === 429) return "Zu viele Anfragen oder das Limit deines Kontos ist erreicht. Bitte versuch es später noch einmal.";
+      return `Der Anbieter hat die Anfrage abgelehnt (Fehler ${e.status}). Prüfe Schlüssel und Modell.`;
+    case "network": return "Keine Verbindung zum Anbieter. Prüfe Internet, Schlüssel und Adresse. Manche Anbieter erlauben Browser-Zugriffe nicht.";
     case "invalid_json": return "Die Antwort hatte nicht das erwartete Format. Bitte erneut versuchen.";
-    case "prompt_too_large": return "Die Übung ist zu lang geworden. Starte eine neue Runde.";
+    case "empty_completion": return "Der Anbieter hat nichts geantwortet. Bitte erneut versuchen.";
     case "cancelled": return "";
-    default: return "Die Verbindung zu Claude ist unterbrochen. Bitte erneut versuchen.";
+    default: return "Die Verbindung zur KI ist unterbrochen. Bitte erneut versuchen.";
   }
 }
 
@@ -506,7 +577,7 @@ const MOCK_LINES = {
   mittel: ["Das kommt jetzt ziemlich überraschend. Warum gerade jetzt?", "Ich finde, das hätte man auch früher ansprechen können. Ist das wirklich schon entschieden?", "Und was ist mit allem, was ich in den letzten Monaten reingesteckt habe? Zählt das gar nicht?", "Gut. Dann möchte ich wenigstens wissen, wie der Übergang aussieht."],
   schwer: ["Wie bitte? Das ist doch nicht dein Ernst. Nach allem, was ich hier gemacht habe?", "Nein, das akzeptiere ich so nicht. Da muss es doch eine andere Lösung geben.", "Du machst es dir da ziemlich einfach. Wer hat das überhaupt entschieden?", "Dann will ich das schriftlich haben, und ich werde das prüfen lassen.", "… Okay. Und wie soll das jetzt ganz konkret ablaufen?"],
 };
-const sentences = (t) => t.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter((x) => x.length > 2);
+const sentences = (t) => t.replace(/([.!?])\s+/g, "$1\u0001").split("\u0001").map((x) => x.trim()).filter((x) => x.length > 2);
 function mockInterview(s) {
   const q = [
     { prime: "purpose", question: "Was soll am Ende des Gesprächs unmissverständlich feststehen – und worüber bist du bereit zu sprechen?", why: "So trennen wir das Nicht-Verhandelbare von dem, was offen ist." },
@@ -550,12 +621,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ---------------- Coaching-Engine ----------------
 function pickProvider(s) {
-  if (s.provider === "claude" && !claudeUsable()) throw { code: "not_granted" };
+  if (s.provider === "live" && !liveUsable()) throw { code: "not_granted" };
   return s.provider;
 }
 async function runInterview(s) {
   let out;
-  if (pickProvider(s) === "claude") {
+  if (pickProvider(s) === "live") {
     out = await sampleFn.json(interviewPromptText(s), { modelTier: s.tier || "default", cache: false });
   } else { await wait(500); out = mockInterview(s); }
   const qs = (Array.isArray(out?.questions) ? out.questions : [])
@@ -568,18 +639,18 @@ async function runInterview(s) {
   return { questions: qs, legalNotice: legal || null };
 }
 async function runCounterpart(s, round, onText, signal) {
-  if (pickProvider(s) === "claude") {
+  if (pickProvider(s) === "live") {
     const r = await sampleFn(counterpartPromptText(s, round), { modelTier: "quick", cache: false, signal, onText: ({ text }) => onText(text) });
     return r.text.trim().replace(/^GEGENÜBER:\s*/i, "").replace(/^["„]|["“]$/g, "");
   }
   const text = mockCounterpart(s, round);
   let acc = "";
-  for (const w of text.split(/(?<= )/)) { if (signal?.aborted) throw { code: "cancelled" }; await wait(30); acc += w; onText(acc); }
+  for (const w of (text.match(/[^ ]* ?/g) || []).filter(Boolean)) { if (signal?.aborted) throw { code: "cancelled" }; await wait(30); acc += w; onText(acc); }
   return text;
 }
 async function runFeedback(s, round, prevLines) {
   let out;
-  if (pickProvider(s) === "claude") {
+  if (pickProvider(s) === "live") {
     out = await sampleFn.json(feedbackPromptText(s, round, prevLines), { modelTier: s.tier || "default", cache: false });
   } else { await wait(600); out = mockFeedback(round); }
   const ok = (o, k) => o && typeof o[k] === "string" && o[k].trim();
@@ -634,14 +705,25 @@ function sessionList(list, deletable) {
 
 const pLockSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
 function dossierPreview() {
-  return `<aside class="preview" aria-label="Beispiel eines Dossiers">
+  const sc = pScores(pDemoSession()), st = pRating(sc.total)[0], bar = (k) => sc.dims[k] || 0;
+  return `<aside class="preview" role="button" tabindex="0" data-pa="demo" aria-label="Vollständiges Beispiel-Dossier ansehen">
     <p class="eyebrow">Beispiel · erfundene Daten</p>
-    <div class="pv-score"><b>Fast bereit: nachschärfen</b><span class="pv-num">78<small> / 100</small></span></div>
-    <div class="pv-bars"><div><span>Ziel &amp; Botschaft</span><i style="width:90%"></i></div><div><span>Grenzen &amp; Spielraum</span><i style="width:55%"></i></div><div><span>Reaktionen unter Druck</span><i style="width:72%"></i></div></div>
+    <div class="pv-score"><b>${esc(st)}</b><span class="pv-num">${sc.total}<small> / 100</small></span></div>
+    <div class="pv-bars"><div><span>Ziel &amp; Botschaft</span><i style="width:${bar("ziel")}%"></i></div><div><span>Grenzen &amp; Spielraum</span><i style="width:${bar("grenzen")}%"></i></div><div><span>Reaktionen unter Druck</span><i style="width:${bar("stress")}%"></i></div></div>
     <p class="pv-card"><span class="eyebrow">Wenn-dann-Karte · Gegenangebot</span>„Danke, das ist ein Zeichen von Wertschätzung. Meine Entscheidung steht, und ein Angebot ändert sie nicht.“</p>
     <p class="pv-foot">Dein Dossier enthält Drehbuch, Checkliste und Nachbereitung.</p>
+    <span class="pv-cta">Ganzes Beispiel ansehen →</span>
   </aside>`;
 }
+ui.flow = null;
+const FLOW_DETAIL = [
+  ["Du beschreibst in ein, zwei Sätzen, worum es geht, wer das Gegenüber ist und was du erreichen willst. Es muss nicht perfekt formuliert sein.", "„Ich muss Tom mitteilen, dass sein befristeter Vertrag Ende Dezember nicht verlängert wird.“"],
+  ["Der Coach stellt bis zu fünf gezielte Fragen zu Ziel, Fakten, Gegenüber, Ablauf und deinen Erfahrungen. Er erfindet nichts, er fragt nur nach dem, was du selbst weißt.", "„Welche Reaktion erwartest du als schwierig, und woran hast du sie schon erlebt?“"],
+  ["Du schreibst deinen ersten Satz selbst. So passt das Training zu deiner Stimme und nicht zu einer Vorlage.", "„Tom, ich möchte mit dir über deinen Vertrag sprechen. Er wird nicht verlängert.“"],
+  ["Die KI, oder ohne KI ein lokaler Mock, spielt dein Gegenüber in drei Härtegraden. Du antwortest in deinen Worten, Satz für Satz.", "Gegenüber: „Warum jetzt? Das kommt aus heiterem Himmel.“"],
+  ["Du bekommst eine konkrete Stärke, einen Verbesserungspunkt mit Zitat aus deinen Aussagen und eine Alternative. Bewertet wird nur, was du gesagt hast.", "Stärke: „Ich habe mich entschieden“ macht klar, dass es entschieden ist. Verbessern: „eigentlich“ weicht die Aussage auf."],
+  ["Der schwierigste Moment wird noch einmal gespielt. Danach legst du fest, was du als Nächstes konkret tust.", "Nächster Schritt: „Morgen um 10 Uhr bespreche ich die Übergabe mit Tom.“"],
+];
 function viewHome() {
   const recent = [...memSessions].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 3);
   const steps = [["Situation", "Du beschreibst kurz, worum es geht."], ["Rückfragen", "Der Coach fragt gezielt nach – nichts wird erfunden."], ["Einstieg", "Du formulierst deinen ersten Satz selbst."], ["Rollenspiel", "Die KI spielt dein Gegenüber – leicht, mittel oder schwer."], ["Feedback", "Eine Stärke, ein Punkt zum Verbessern, eine Alternative."], ["Wiederholen", "Du übst den schwierigen Moment und legst deinen nächsten Schritt fest."]];
@@ -657,9 +739,11 @@ function viewHome() {
     </div>
     ${dossierPreview()}
   </section>
-  <ol class="flow" aria-label="Ablauf">${steps.map(([t], i) => `<li${i === 0 ? ' class="first"' : ""}>${t}</li>`).join("")}</ol>
+  <section class="stack" aria-label="Ablauf im Rollenspiel"><p class="eyebrow">Ablauf im Rollenspiel · tippe auf einen Schritt</p>
+  <ol class="flow flow-btns">${steps.map(([t], i) => `<li><button type="button" class="flowbtn${ui.flow === i ? " on" : ""}" data-flow="${i}" aria-expanded="${ui.flow === i}">${t}</button></li>`).join("")}</ol>
+  ${ui.flow != null ? `<div class="flowcard" role="region" aria-live="polite"><b>${esc(steps[ui.flow][0])}</b><p>${esc(FLOW_DETAIL[ui.flow][0])}</p><p class="flowex"><span class="eyebrow">Beispiel</span><br>${esc(FLOW_DETAIL[ui.flow][1])}</p><button class="btn btn-primary" data-go="form">Selbst ausprobieren</button></div>` : ""}</section>
   ${recent.length ? `<section class="stack"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Zuletzt geübt</h2><button class="linkbtn" data-go="history">Ganzer Verlauf</button></div>${sessionList(recent, false)}</section>` : ""}
-  <section class="stack fine"><h2>Datenschutz und Grenzen</h2><p class="small muted">Der Coach ersetzt keine Rechtsberatung. Übungen werden nur in diesem Browser gespeichert und lassen sich im Verlauf jederzeit löschen. Mit Claude als Anbieter werden die Inhalte über das Claude-Konto der Person verarbeitet, die diese Seite geöffnet hat. Wer die KI testen möchte, meldet sich dafür bei Claude an; ohne KI läuft die Offline-Version.</p></section>`;
+  <section class="stack fine"><h2>Datenschutz und Grenzen</h2><p class="small muted">Der Coach ersetzt keine Rechtsberatung. Übungen werden nur in diesem Browser gespeichert und lassen sich im Verlauf jederzeit löschen. Mit einer KI als Anbieter werden die Inhalte an den von dir gewählten Anbieter übertragen.</p></section>`;
 }
 
 function blankForm() { return { scenario: "trennung-mitarbeitende", difficulty: "mittel", situation: "", relationship: "", counterpartLabel: "", goal: "", difficultMoments: "", experience: "", writingSample: "" }; }
@@ -690,7 +774,7 @@ function viewForm() {
     <div id="form-legal">${legal ? legalBox() : ""}</div>
     ${ui.errors.form ? errBox(ui.errors.form) : ""}
     <div class="stack" style="gap:6px"><button type="submit" class="btn btn-primary btn-block">Weiter zu den Rückfragen</button>
-      <p class="small muted" style="text-align:center">KI: ${esc(providerText(p, effectiveTier()))}${sampleState === "pending" ? " · prüfe Claude-Verfügbarkeit …" : ""}</p></div>
+      <p class="small muted" style="text-align:center">KI: ${esc(providerText(p, effectiveTier()))}</p></div>
   </form>`;
 }
 
@@ -703,14 +787,14 @@ function viewSession() {
   const s = getSession(ui.id);
   if (!s) return `<div class="panel pb stack" style="border:1px solid var(--line)"><p>Diese Übung gibt es nicht mehr.</p><button class="btn btn-primary" data-go="form">Neue Übung</button></div>`;
   const eff = effectiveProvider(), effTier = effectiveTier();
-  const mismatch = eff !== s.provider || (eff === "claude" && effTier !== (s.tier || "default"));
-  const claudeGone = s.provider === "claude" && !claudeUsable() && sampleState !== "pending";
+  const mismatch = eff !== s.provider || (eff === "live" && effTier !== (s.tier || "default"));
+  const liveGone = s.provider === "live" && !liveUsable();
   return `
   <header class="stack" style="gap:10px">
     <div><p class="eyebrow" style="letter-spacing:.02em;text-transform:none;font-size:13px">${esc(SCENARIOS[s.setup.scenario])}</p><h1 style="font-size:21px">${esc(s.title)}</h1></div>
     ${progress(s.phase)}
     <p class="small muted">KI: ${esc(providerText(s.provider, s.tier))}</p>
-    ${claudeGone ? `<div class="banner"><span>Claude ist in dieser Ansicht nicht verfügbar.</span><button class="linkbtn" data-act="switch-mock">Mit Mock fortfahren</button></div>`
+    ${liveGone ? `<div class="banner"><span>Die KI ist nicht eingerichtet (API-Schlüssel fehlt).</span><button class="linkbtn" data-act="switch-mock">Mit Mock fortfahren</button></div>`
       : mismatch ? `<div class="banner"><span>In den Einstellungen ist <b>${esc(providerText(eff, effTier))}</b> gewählt.</span><button class="linkbtn" data-act="switch-settings">Für diese Übung wechseln</button></div>` : ""}
   </header>
   ${phaseView(s)}`;
@@ -730,7 +814,7 @@ function phaseView(s) {
 
 function viewInterview(s) {
   let body = "";
-  if (ui.busy.interview) body += spinner(s.provider === "claude" ? "Der Coach liest deine Angaben … (kann bis zu einer Minute dauern)" : "Der Coach liest deine Angaben …");
+  if (ui.busy.interview) body += spinner(s.provider === "live" ? "Der Coach liest deine Angaben … (kann bis zu einer Minute dauern)" : "Der Coach liest deine Angaben …");
   if (ui.errors.interview) body += errBox(ui.errors.interview, "retry-interview");
   if (s.interview) {
     body += `<div class="stack-lg"><p class="small muted">Beantworte, was du weißt – alles ist optional. Je konkreter, desto realistischer wird die Übung.</p>
@@ -779,7 +863,7 @@ function viewRoleplay(s) {
     ${TTS ? `<label class="ttsrow"><input type="checkbox" data-tts${ui.tts ? " checked" : ""}> Antworten von ${esc(who)} vorlesen</label>` : ""}
     <div class="chat" id="chat">
       ${round.turns.map((t) => bubble(t, who)).join("")}
-      ${streaming ? bubble({ role: "assistant", content: ui.streaming || (s.provider === "claude" ? "denkt nach …" : "…") }, who, "stream-bubble") : ""}
+      ${streaming ? bubble({ role: "assistant", content: ui.streaming || (s.provider === "live" ? "denkt nach …" : "…") }, who, "stream-bubble") : ""}
       ${ui.errors.roleplay ? errBox(ui.errors.roleplay, "retry-reply") : ""}
     </div>
     <form class="composer" id="rp-form">
@@ -788,7 +872,7 @@ function viewRoleplay(s) {
       <p class="hint">${VOICE_HINT}</p>
       <button type="submit" class="btn btn-primary btn-block" id="rp-send" style="font-size:16px"${streaming || awaiting || !(s.chatDraft || "").trim() ? " disabled" : ""}>Senden</button>
       <button type="button" class="btn btn-quiet" data-act="end-roleplay" style="align-self:center"${canEnd ? "" : " disabled"}>${repeat ? "Kurzfeedback" : "Beenden &amp; Feedback"}</button>
-      ${streaming && s.provider === "claude" ? `<button type="button" class="linkbtn small" data-act="stop-stream" style="align-self:center">Antwort abbrechen</button>` : ""}
+      ${streaming && s.provider === "live" ? `<button type="button" class="linkbtn small" data-act="stop-stream" style="align-self:center">Antwort abbrechen</button>` : ""}
       ${userTurns >= 6 ? `<p class="hint" style="text-align:center">${userTurns >= MAX_USER_TURNS ? "Maximale Länge erreicht – hol dir jetzt Feedback." : "Guter Zeitpunkt für Feedback."}</p>` : ""}
     </form></section>`;
 }
@@ -811,7 +895,7 @@ function viewFeedbackStep(s) {
   const repeat = round.kind === "wiederholung";
   return `<div class="divider">Rollenspiel beendet</div>
     <details class="box"><summary>Transkript ansehen (${round.turns.length} Beiträge)</summary>${transcriptHtml(round, s.setup.counterpartLabel)}</details>
-    ${ui.busy.feedback ? spinner(s.provider === "claude" ? "Der Coach wertet deine Aussagen aus … (kann bis zu einer Minute dauern)" : "Der Coach wertet deine Aussagen aus …") : ""}
+    ${ui.busy.feedback ? spinner(s.provider === "live" ? "Der Coach wertet deine Aussagen aus … (kann bis zu einer Minute dauern)" : "Der Coach wertet deine Aussagen aus …") : ""}
     ${ui.errors.feedback ? errBox(ui.errors.feedback, "retry-feedback") : ""}
     ${round.feedback ? `${feedbackView(round.feedback, repeat ? "Kurzfeedback zur Wiederholung" : "Feedback")}
       <div class="stack" style="gap:8px"><button class="btn btn-primary btn-block" data-act="to-next" style="font-size:16px">Nächsten Schritt festlegen</button>
@@ -855,20 +939,24 @@ function viewHistory() {
 }
 
 function viewSettings() {
-  const sel = memSettings.providerId || effectiveProvider();
-  const tier = effectiveTier();
-  const claudeLine = sampleState === "pending" ? "Verfügbarkeit wird geprüft …" : claudeUsable() ? "Echte KI. Nutzt das Claude-Konto der Person, die diese Seite geöffnet hat; beim ersten Aufruf fragt die App um Erlaubnis." : sampleState === "denied" ? "In dieser Ansicht nicht erlaubt. Beim nächsten Öffnen kannst du den Zugriff erlauben." : "KI ist auf dieser Seite nicht angebunden. Die Demo läuft vollständig mit dem lokalen Mock.";
-  const card = (id, label, line, badges, disabled) => `<label class="provider${sel === id ? " sel" : ""}"><input type="radio" name="prov" value="${id}"${sel === id ? " checked" : ""}${disabled ? " disabled" : ""}><div style="min-width:0"><b>${esc(label)}</b><p class="small muted">${esc(line)}</p><div class="badges">${badges.map(([t, on]) => `<span class="badge${on ? "" : " off"}">${t}</span>`).join("")}</div></div></label>`;
+  const sel = effectiveProvider();
+  const v = memSettings.vendor || "anthropic";
+  const card = (id, label, line, disabled) => `<label class="provider${sel === id ? " sel" : ""}"><input type="radio" name="prov" value="${id}"${sel === id ? " checked" : ""}${disabled ? " disabled" : ""}><div style="min-width:0"><b>${esc(label)}</b><p class="small muted">${esc(line)}</p></div></label>`;
   return `<div class="stack" style="gap:6px"><h1>Einstellungen</h1><p class="small muted">Wähle, wer Coach und Gegenüber spielt. Die Wahl gilt für neue Übungen; bei laufenden Übungen wirst du vor einem Wechsel gefragt.</p></div>
   <fieldset class="stack" style="border:0;padding:0;margin:0"><legend class="lbl">Anbieter</legend>
-    ${card("claude", PROVIDERS.claude.label, claudeLine, [["Text", true], ["Streaming", true], ["Strukturiert", true], ["Audio", false]], !claudeUsable())}
-    ${card("mock", PROVIDERS.mock.label, "Regelbasierte Beispielantworten. Keine Daten verlassen deinen Browser. Gut zum Ausprobieren.", [["Text", true], ["Streaming", true], ["Strukturiert", true], ["Audio", false]], false)}
+    ${card("live", PROVIDERS.live.label, liveUsable() ? `Echte KI: ${providerText("live", effectiveTier())}. Deine Eingaben gehen direkt an den Anbieter.` : "Erst einrichten: Anbieter, Modell und API-Schlüssel unten eintragen.", !liveUsable())}
+    ${card("mock", PROVIDERS.mock.label, "Regelbasierte Beispielantworten. Keine Daten verlassen deinen Browser. Gut zum Ausprobieren.", false)}
   </fieldset>
-  ${sel === "claude" ? `<div><label class="lbl" for="tier">Modell</label>
-    <select id="tier" class="field">${Object.entries(TIERS).map(([k, v]) => `<option value="${k}"${tier === k ? " selected" : ""}>${v}${k === "quick" ? " – schnellste Antworten" : k === "complex" ? " – genaueres Feedback, langsamer" : " – ausgewogen"}</option>`).join("")}</select>
-    <p class="hint">Gilt für Rückfragen und Feedback. Das Gegenüber antwortet immer mit dem schnellen Modell, damit sich das Rollenspiel flüssig anfühlt.</p></div>` : ""}
+  <div class="stack"><h2>KI einrichten</h2>
+    <div><label class="lbl" for="vendor">Anbieter</label><select id="vendor" class="field">${Object.entries(VENDORS).map(([k, x]) => `<option value="${k}"${v === k ? " selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
+    ${VENDORS[v].needsBase ? `<div><label class="lbl" for="baseurl">Adresse (Base-URL)</label><input id="baseurl" class="field" value="${esc(memSettings.baseUrl || "")}" placeholder="https://api.groq.com/openai/v1" autocomplete="off"></div>` : ""}
+    <div><label class="lbl" for="model">Modell</label><input id="model" class="field" value="${esc(memSettings.model || "")}" placeholder="${esc(VENDORS[v].model || "Modellname")}" autocomplete="off" spellcheck="false"><p class="hint">Leer lassen für den Standard (${esc(VENDORS[v].model || "bitte eintragen")}). Passe den Namen an, wenn dein Anbieter ihn geändert hat.</p></div>
+    <div><label class="lbl" for="apikey">API-Schlüssel</label><input id="apikey" type="password" class="field" value="${esc(apiKey)}" placeholder="Dein persönlicher Schlüssel" autocomplete="off" spellcheck="false">
+      <label class="ttsrow" style="padding:0"><input type="checkbox" id="remember"${memSettings.rememberKey ? " checked" : ""}> Auf diesem Gerät merken (sonst nur bis zum Schließen des Tabs)</label>
+      <p class="hint">Der Schlüssel bleibt in deinem Browser und geht nur an den gewählten Anbieter. Nutze nach Möglichkeit einen Schlüssel mit Ausgabenlimit, und gib ihn nie auf fremden Geräten ein.</p></div>
+  </div>
   ${ui.errors.settingsSaved ? `<p class="small" style="color:var(--accent-text)" role="status">Gespeichert.</p>` : ""}
-  <p class="small muted">Diese Demo läuft ohne Server. Auf dieser Seite antwortet der lokale Mock, die KI-Anbindung ist als Konzept vorgesehen.</p>`;
+  <p class="small muted">Diese Version läuft ohne Server direkt auf der Webseite. Sie speichert Übungen nur in deinem Browser.</p>`;
 }
 
 function renderModal() {
@@ -880,8 +968,8 @@ function renderModal() {
   if (Object.values(s.answers).some(Boolean)) items.push("Antworten auf die Rückfragen");
   if (s.rounds.length) items.push(`Rollenspiel-Verläufe (${s.rounds.length})`);
   root.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="c-title"><div class="modal-card">
-    <h2 id="c-title" style="font-size:18px">Verlauf an Claude übertragen?</h2>
-    <p class="small muted">Diese Übung wurde bisher nur lokal mit dem Mock verarbeitet. Wenn du zu <b style="color:var(--ink)">Claude</b> wechselst, werden bei der nächsten Anfrage folgende Inhalte über dein Claude-Konto verarbeitet:</p>
+    <h2 id="c-title" style="font-size:18px">Verlauf an die KI übertragen?</h2>
+    <p class="small muted">Diese Übung wurde bisher nur lokal mit dem Mock verarbeitet. Wenn du zur <b style="color:var(--ink)">KI</b> wechselst, werden bei der nächsten Anfrage folgende Inhalte an den von dir gewählten Anbieter gesendet:</p>
     <ul class="small">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
     <button class="btn btn-primary" data-act="consent-yes">Übertragen und wechseln</button>
     <button class="btn" data-act="consent-no">Beim bisherigen Anbieter bleiben</button>
@@ -902,7 +990,7 @@ function addMics() {
 }
 function render() {
   const app = $("#app");
-  const views = { prep: viewPrep, prepRun: viewPrepRun, prepDossier: viewPrepDossier, prepAfter: viewPrepAfter, home: viewHome, form: viewForm, session: viewSession, history: viewHistory, settings: viewSettings };
+  const views = { prep: viewPrep, prepRun: viewPrepRun, prepDossier: viewPrepDossier, prepDemo: viewPrepDemo, prepAfter: viewPrepAfter, home: viewHome, form: viewForm, session: viewSession, history: viewHistory, settings: viewSettings };
   app.innerHTML = (views[ui.view] || viewHome)();
   $("#nav-prep").setAttribute("aria-current", ui.view.startsWith("prep") ? "page" : "false");
   $("#nav-history").setAttribute("aria-current", ui.view === "history" ? "page" : "false");
@@ -999,7 +1087,7 @@ async function doFeedback() {
 
 function switchProvider(target, tier) {
   const s = getSession(ui.id); if (!s) return;
-  const needsConsent = target === "claude" && s.disclosedTo.length > 0 && !s.disclosedTo.includes("claude");
+  const needsConsent = target === "live" && s.disclosedTo.length > 0 && !s.disclosedTo.includes("live");
   if (needsConsent) { ui.consent = { target, tier }; renderModal(); return; }
   ui.errors = {}; startedKey = "";
   update(s.id, (x) => ({ ...x, provider: target, tier }));
@@ -1075,7 +1163,11 @@ document.addEventListener("change", (ev) => {
   const el = ev.target;
   if (el.name === "prov") { memSettings.providerId = el.value; persist(); ui.errors.settingsSaved = true; render(); }
   if ("tts" in el.dataset) { ui.tts = el.checked; if (!ui.tts) { try { speechSynthesis.cancel(); } catch {} } }
-  if (el.id === "tier") { memSettings.tier = el.value; persist(); ui.errors.settingsSaved = true; render(); }
+  if (el.id === "vendor") { memSettings.vendor = el.value; memSettings.model = ""; persist(); ui.errors.settingsSaved = true; render(); }
+  if (el.id === "remember") { memSettings.rememberKey = el.checked; persist(); saveKey(); }
+  if (el.id === "model") { memSettings.model = el.value.trim(); persist(); ui.errors.settingsSaved = true; render(); }
+  if (el.id === "baseurl") { memSettings.baseUrl = el.value.trim(); persist(); ui.errors.settingsSaved = true; render(); }
+  if (el.id === "apikey") { apiKey = el.value.trim(); saveKey(); ui.errors.settingsSaved = true; render(); }
 });
 
 document.addEventListener("submit", (ev) => {
@@ -1621,6 +1713,50 @@ function pCatalogText() {
   L.push("", "AUSWERTUNG (Regelprüfung der Form)", "- Antworten: Länge, Absicherungswörter, Konkretheit (Zahl/Datum), Vermutungen über das Gegenüber, Trennung nicht verhandelbar/verhandelbar.", "- Reaktionen: Länge, Absicherungen, Abwehr-Einstieg, Zuhör-Signal, hörbare Grenze, nächster Schritt, Gefühl als Tatsache, Zusagen, fast wörtliche Übernahme der Musterformulierung.", "- Gesamtnote: 55 % Fundament, 45 % Reaktionen. Stufen: ab 75 gesprächsreif, ab 50 nachschärfen.");
   return L.join("\n");
 }
+const P_DEMO_ANS = {
+  ziel1: "Tom, dein befristeter Vertrag endet am 31. Dezember und wird nicht verlängert.",
+  ziel2: "Tom kann die Entscheidung am Ende mit eigenen Worten wiedergeben. Der Übergabetermin am 15. Dezember steht im Kalender.",
+  fakt1: "Budgetbeschluss der Bereichsleitung vom 3. November, zwei befristete Stellen entfallen. Die Auswahl folgt der Vertragslaufzeit, nicht der Leistung. Nicht nennen: interne Diskussion über andere Kandidaten.",
+  fakt2: "Ob es später wieder eine Stelle gibt, weiß ich heute nicht. Ich melde mich dazu bis 20. November.",
+  geg1: "Tom ist Sicherheit und Anerkennung wichtig. Im Mitarbeitergespräch im Juni hat er gefragt, wie es mit seiner Perspektive aussieht, und mehrfach nach Feedback gefragt.",
+  geg2: "Als sein Projekt im März verschoben wurde, hat er zuerst nachgefragt, warum, und sich dann zwei Tage zurückgezogen. Danach kam er mit einem Alternativvorschlag.",
+  rahmen1: "Dienstag, 10. November, 10 Uhr, kleiner Besprechungsraum, 30 Minuten, nur Tom und ich. Vormittags, damit er den Tag nicht allein verbringt. Erster Satz: „Ich habe heute keine gute Nachricht.“",
+  risiko1: "Worst Case: Tom wird laut oder verlässt den Raum. Wahrscheinlichkeit gering bis mittel. Ich biete eine Pause von zehn Minuten an und bleibe bei der Botschaft.",
+  grenz1: "Nicht verhandelbar: das Vertragsende zum 31. Dezember und die Begründung. Verhandelbar: die Gestaltung der Übergabe und wie wir es dem Team sagen.",
+  emo1: "Am meisten bringt mich ein Vorwurf wie „Du hast mich im Stich gelassen“ aus dem Konzept. Mein erster Satz dann: „Ich höre, dass dich das hart trifft. Die Entscheidung bleibt.“",
+  komm1: "Zuerst HR am 9. November, dann Tom am 10. November, das Team am 12. November gemeinsam mit Tom abgestimmt. Wenn es vorher durchsickert, informiere ich Tom noch am selben Tag.",
+  danach1: "Bis 13. November: schriftliche Zusammenfassung an Tom (ich). Bis 20. November: Übergabeplan (Tom und ich). Bis 30. November: Zeugnisentwurf (HR).",
+  org1: "Das Budget wurde für das Jahr 2027 gekürzt, die Fähigkeit zur Datenauswertung muss danach aus dem verbleibenden Team kommen. Ich baue sie bis Februar durch zwei Schulungen auf.",
+  org2: "Von außen soll erzählt werden: Projekt beendet, Budget gekürzt, saubere Übergabe. Kunden hören das von mir direkt am 12. November.",
+  org3: "Das Signal an die Verbleibenden: Verträge werden nach Kriterien entschieden, nicht nach Sympathie. Das passt zu dem, was wir nach außen sagen, widerspricht ihm aber bei der kurzen Vorlaufzeit.",
+  x1: "Keine Leistungsbelege nötig, keine Leistungsentscheidung.",
+  x2: "Stärkster Einwand: „Warum ich und nicht jemand anderes?“ Antwort: Auswahl nach Vertragsende, nicht nach Leistung, und das gilt für beide befristeten Stellen.",
+  x3: "HR ist informiert, der Betriebsrat am 9. November. Tom bekommt einen ruhigen Raum, danach eine Stunde Zeit, bevor er zurück in den Arbeitsbereich geht.",
+};
+const P_DEMO_REACT = {
+  schock: "Das trifft dich, und ich verstehe das. Nimm dir einen Moment. Danach gehen wir gemeinsam durch, was als Nächstes kommt.",
+  warum: "Ich verstehe, dass du das wissen willst. Es geht um das Vertragsende und nicht um deine Arbeit. Die Kriterien erkläre ich dir gern, die Entscheidung bleibt.",
+  verhandeln: "Ich verstehe, wie wichtig dir das ist. Die Verlängerung ist entschieden und kommt nicht mehr. Offen ist die Übergabe, und ich schlage vor, dass wir sie bis 15. Dezember planen.",
+  fairness: "Die Auswahl folgte dem Vertragsende, das sage ich dir offen. Über andere Fälle spreche ich nicht.",
+  trauer: "Wir haben Zeit. Wenn du magst, machen wir eine Pause, und ich verstehe, wenn du heute nicht mehr sprechen willst. Dann sehen wir weiter.",
+  anwalt: "Das ist dein gutes Recht. Ich schlage vor, dass alles Formale über HR läuft. Die Entscheidung bleibt, und ich möchte heute klären, was du jetzt brauchst.",
+};
+function pDemoSession() {
+  const s = { id: "demo", sc: "trennung-mitarbeitende", who: "Tom (Beispiel)", ans: P_DEMO_ANS, reacts: P_DEMO_REACT, rsc: {}, check: { 0: true, 1: true, 2: true }, after: null };
+  P_SCEN[s.sc].react.forEach((id) => { s.rsc[id] = pReplyScore(P_DEMO_REACT[id], P_CARDS[id]).score; });
+  return s;
+}
+function viewPrepDemo() {
+  const s = pDemoSession(), d = pDossier(s);
+  return `<div class="stack-lg pdoss">
+    <header class="stack"><button class="linkbtn" data-go="home" style="align-self:flex-start">← Zurück</button>
+      <div class="note note-legal" role="note"><b>Beispiel mit erfundenen Daten</b><br>So sieht ein fertiges Dossier aus. Namen, Daten und Antworten sind frei erfunden. Dein eigenes baust du aus deinen Antworten.</div>
+      <p class="eyebrow">Dossier · ${esc(d.title)}</p><h1>Beispiel: Gesprächs-Dossier für Tom</h1>
+      <div class="pact"><button class="btn btn-primary" data-go="prep">Eigenes Gespräch vorbereiten</button></div></header>
+    ${d.sec.map((x) => `<section class="psec"><h2>${esc(x.h)}</h2>${x.b.map((b) => pBlock(b, s)).join("")}</section>`).join("")}
+    <div class="pnav"><button class="btn btn-primary" data-go="prep">Eigenes Gespräch vorbereiten</button></div>
+  </div>`;
+}
 // ---- Aktionen ----
 function pAfterRender() {
   if (ui.ptm) { clearInterval(ui.ptm); ui.ptm = null; }
@@ -1631,6 +1767,7 @@ function pFlash(m) { const e = document.getElementById("p-msg"); if (e) e.textCo
 document.addEventListener("click", async (ev) => {
   const t = ev.target.closest("[data-pa]"); if (!t) return;
   const a = t.dataset.pa, d = t.dataset;
+  if (a === "demo") { ui.pid = null; go("prepDemo"); return; }
   if (a === "new") {
     const s = { id: uid(), sc: d.sc, who: "", timed: false, step: 0, ans: {}, probed: {}, reacts: {}, rsc: {}, check: {}, done: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
     memPrep.push(s); pSave(); ui.pid = s.id; ui.pprobe = null; ui.preveal = null; go("prepRun"); return;
@@ -1693,6 +1830,8 @@ document.addEventListener("click", async (ev) => {
     go("form"); return;
   }
 });
+document.addEventListener("keydown", (ev) => { if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches && ev.target.matches('.preview[data-pa="demo"]')) { ev.preventDefault(); ev.target.click(); } });
+document.addEventListener("click", (ev) => { const b = ev.target.closest("[data-flow]"); if (!b) return; const i = +b.dataset.flow; ui.flow = ui.flow === i ? null : i; render(); const f = document.querySelector(".flowcard"); if (f) f.scrollIntoView({ block: "nearest", behavior: "smooth" }); });
 document.addEventListener("input", (ev) => {
   const el = ev.target, d = el.dataset; if (!ui.pid) return;
   if ("paf" in d) { pUpdate(ui.pid, (s) => ({ ...s, after: { ...(s.after || {}), [d.paf]: el.value } }), false); return; }
@@ -1721,14 +1860,8 @@ document.addEventListener("change", (ev) => {
 
 // ---------------- Start ----------------
 loadAll();
+loadKey();
 render();
-(async () => {
-  try {
-    const s = window.claude?.use ? await window.claude.use("sample") : null;
-    sampleFn = s; sampleState = s ? "ready" : "absent";
-  } catch { sampleState = "absent"; }
-  if (ui.view !== "session" || ui.streaming === null) render();
-})();
 })();
 </script>
 <style>
