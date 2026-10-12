@@ -7,18 +7,14 @@ Statische Website (HTML, CSS, JavaScript) ohne Build-Schritt.
 - `wissen-bleibt/` Konzeptstudie Wissen bleibt
 - `impressum.html`, `datenschutz.html` Vorlagen, Platzhalter in [eckigen Klammern] vor der Veröffentlichung ausfüllen
 - `assets/` Bilder, Logo und lokale Schriften
+- `LICENSE` Alle Rechte vorbehalten
 
 ## Veröffentlichen mit GitHub Pages
 
-1. Neues Repository auf GitHub anlegen (z. B. `portfolio`).
-2. Alle Dateien aus diesem Ordner hochladen, `index.html` muss im Hauptverzeichnis liegen.
-3. Im Repository: Settings > Pages > Source: „Deploy from a branch“, Branch `main`, Ordner `/ (root)`.
-4. Nach einigen Minuten ist die Seite unter `https://<benutzername>.github.io/portfolio/` erreichbar.
+1. Alle Dateien und Ordner in das Repository hochladen, `index.html` muss im Hauptverzeichnis liegen.
+2. Settings > Pages > Source: „Deploy from a branch“, Branch `main`, Ordner `/ (root)`.
+3. Die Seite erscheint unter `https://<benutzername>.github.io/<repository>/`.
 
-Eigene Domain: unter Settings > Pages eintragen und beim Domain-Anbieter einen CNAME-Eintrag setzen.
+## Lizenz
 
-## Vor der Veröffentlichung
-
-- Impressum und Datenschutz ausfüllen (Anschrift, E-Mail, Hosting-Anbieter: GitHub Pages).
-- Optional E-Mail im `index.html` bei `LANDING_EMAIL` eintragen.
-- Hinweis: Ein öffentliches Repository ist für alle einsehbar, inklusive Foto und Inhalten.
+© 2026 Aida Đulić. Alle Rechte vorbehalten. Siehe `LICENSE`.
