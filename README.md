@@ -3,9 +3,7 @@
 Statische Website (HTML, CSS, JavaScript) ohne Build-Schritt.
 
 - `index.html` Startseite
-- `urlaubsuebergabe/` Konzeptstudie Urlaubsübergabe
-- `wissen-bleibt/` Konzeptstudie Wissen bleibt
-- `exit-coach/` Konzeptstudie Exit-Coach
+- `urlaubsuebergabe/` Konzeptstudie Urlaubsübergabe (öffentlich). Wissen bleibt und Exit-Coach werden nur im Termin gezeigt und liegen nicht in diesem Paket.
 - `video/` Demo-Video zur Urlaubsübergabe (MP4 mit Vorschaubild)
 - `impressum.html`, `datenschutz.html` Vorlagen, Platzhalter in [eckigen Klammern] vor der Veröffentlichung ausfüllen
 - `assets/` Bilder, Logo und lokale Schriften
